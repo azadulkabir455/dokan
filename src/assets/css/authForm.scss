@@ -1,0 +1,11 @@
+@import "./global.scss";
+
+.authForm {
+    margin-top: 15vh;
+    a {
+        @extend %transition;
+        &:hover {
+            color:$dangerColor !important;
+        }
+    }
+}

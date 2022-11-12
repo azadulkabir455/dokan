@@ -1,0 +1,12 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+$secondaryColor: #6cc3d5;
+$dangerColor: #ff7851;
+
+%transition {
+    transition: all .2s linear;
+}
