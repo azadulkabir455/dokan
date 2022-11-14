@@ -18,11 +18,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <GlobalContextContainer>
-        <Router>
+      <Router>
+        <GlobalContextContainer>
           <App />
-        </Router>
-      </GlobalContextContainer>
+        </GlobalContextContainer>
+      </Router>
     </Provider>
   </React.StrictMode>
 );

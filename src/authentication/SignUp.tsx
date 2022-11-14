@@ -1,15 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Link } from "react-router-dom"
 import { BsFillEnvelopeFill, BsFillKeyFill, BsFillEyeFill, BsFillEyeSlashFill, BsFillPersonFill, BsPersonLinesFill } from "react-icons/bs";
+import { v4 } from "uuid"
+import { storage } from '../firebase-config';
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { GlobalContextContainer, GlobalContextProvider } from '../contextAPI/GlobalContext';
 import "../assets/css/authForm.scss"
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState("password")
   const [eyeIcon, setEyeIcon] = useState(<BsFillEyeSlashFill />)
-  const [inputs, setInputs] = useState([]);
-  const [role, setRole] = useState("default");
-  const [file, setFile] = useState(null);
+  const [inputs, setInputs] = useState<any[]>([]);
+  const [role, setRole] = useState<string>("default");
 
+
+
+
+  // UseState for Image Upload
+  const [file, setFile] = useState<any>(null);
+  const [userImgUrl, setUserImgUrl] = useState('');
+  const [uploadProgress, setUploadProgress] = useState<(number | null)>(null);
+
+  //  Combine All Data
+  const {name, email, password}:{name: string; email: string; password: string;} = inputs;
+  let combineData = { name, email, role, userImgUrl };
+
+  // Import signup fuction form ContextApi
+  const { signUp } = useContext(GlobalContextProvider)
 
   // Functionality for Show and Hide Password
   const passwordShowToggle = () => {
@@ -23,26 +40,57 @@ export default function SignUp() {
   }
 
   // Data Collection from form
- const formHandler = (e: React.SyntheticEvent) => {
-  e.preventDefault();
- }
+  const formHandler = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    signUp(email, password, {...combineData})
+  }
 
- const inputHandle = (e:any) => {
-  let name: string = e.target.name;
-  let value:(string | number) = e.target.value;
-  setInputs( prev => ({...prev, [name]: value}))
+  const inputHandle = (e: any) => {
+    let name: string = e.target.name;
+    let value: (string | number) = e.target.value;
+    setInputs(prev => ({ ...prev, [name]: value }))
 
- }
+  }
 
- const roleHandle = (e:any) => {
-  setRole(e.target.value)
- }
- const fileHandle = (e:any) => {
-  setFile(e.target.files[0])
- }
+  const roleHandle = (e: any) => {
+    setRole(e.target.value)
+  }
 
- let combineData = {...inputs, role, file};
- console.log(combineData)
+  //  For Image Upload
+
+  const fileHandle = (e: any) => {
+    setFile(e.target.files[0])
+  }
+
+  useEffect(() => {
+    if (file === null) return;
+    const imgRef = ref(storage, `userImages/${file.name + v4()}`);
+    const uploadImg = uploadBytesResumable(imgRef, file);
+
+    uploadImg.on("state_changed", (snapshot) => {
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      setUploadProgress(progress);
+
+      switch (snapshot.state) {
+        case "paused":
+          console.log("Image uploading Paused");
+          break;
+        case "running":
+          console.log("Image uploading running");
+          break;
+        default:
+          console.log("Image uploading done");
+      }
+    }, (error) => {
+      console.log(error.message)
+    }, () => {
+      getDownloadURL(uploadImg.snapshot.ref).then((url) => {
+        setUserImgUrl(url);
+      })
+    }
+    )
+  }, [file])
+
   return (
     <>
       <div className="container">
