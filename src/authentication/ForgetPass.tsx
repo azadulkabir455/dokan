@@ -1,10 +1,21 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { Link } from "react-router-dom"
 import { BsFillEnvelopeFill } from "react-icons/bs";
 import "../assets/css/authForm.scss"
 
 export default function ForgetPass() {
+  const [email, setEmail] = useState('');
 
+  // Collect Data from form
+  
+  const submitHandle = (e:React.SyntheticEvent) => {
+    e.preventDefault();
+  }
+  const inputHandle = (e: any) => {
+    setEmail(e.target.value)
+  }
+
+  
   return (
     <>
       <div className="container">
@@ -12,12 +23,12 @@ export default function ForgetPass() {
           <div className="col-4 offset-4">
             <div className="authForm p-4 rounded shadow-lg">
               <h4 className='text-capitalize mb-4'>Reset <span className='text-primary'>Password</span></h4>
-              <form>
+              <form onSubmit={submitHandle}>
                 <div className="form-group mb-4">
                   <label htmlFor="email" className="form-label">Email : </label>
                   <div className="input-group">
                     <span className="input-group-text"><BsFillEnvelopeFill /></span>
-                    <input type="email" className="form-control" id="email" name="email" placeholder="Write your email" />
+                    <input type="email" className="form-control" id="email" name="email" placeholder="Write your email" onClick={inputHandle} value={email}/>
                   </div>
                 </div>
                 <div className="form-group mb-3">
