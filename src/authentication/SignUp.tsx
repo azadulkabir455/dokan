@@ -4,29 +4,27 @@ import { BsFillEnvelopeFill, BsFillKeyFill, BsFillEyeFill, BsFillEyeSlashFill, B
 import { v4 } from "uuid"
 import { storage } from '../firebase-config';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { GlobalContextContainer, GlobalContextProvider } from '../contextAPI/GlobalContext';
+import { GlobalContextProvider } from '../contextAPI/GlobalContext';
 import "../assets/css/authForm.scss"
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState("password")
   const [eyeIcon, setEyeIcon] = useState(<BsFillEyeSlashFill />)
-  const [inputs, setInputs] = useState<any[]>([]);
+  const [inputs, setInputs] = useState<(any)>([]);
   const [role, setRole] = useState<string>("default");
-
-
-
 
   // UseState for Image Upload
   const [file, setFile] = useState<any>(null);
   const [userImgUrl, setUserImgUrl] = useState('');
-  const [uploadProgress, setUploadProgress] = useState<(number | null)>(null);
+  const [uploadProgress, setUploadProgress] = useState<any>(null);
 
-  //  Combine All Data
-  const {name, email, password}:{name: string; email: string; password: string;} = inputs;
+
+  //  Destructure Combine All Data
+  const { name, email, password } = inputs;
   let combineData = { name, email, role, userImgUrl };
 
   // Import signup fuction form ContextApi
-  const { signUp } = useContext(GlobalContextProvider)
+  const { signUp }: any = useContext(GlobalContextProvider)
 
   // Functionality for Show and Hide Password
   const passwordShowToggle = () => {
@@ -39,16 +37,16 @@ export default function SignUp() {
     }
   }
 
-  // Data Collection from form
+  // Form Handler and Data Collection from Form
   const formHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    signUp(email, password, {...combineData})
+    signUp(email, password, { ...combineData });
   }
 
   const inputHandle = (e: any) => {
     let name: string = e.target.name;
     let value: (string | number) = e.target.value;
-    setInputs(prev => ({ ...prev, [name]: value }))
+    setInputs((prev: any) => ({ ...prev, [name]: value }))
 
   }
 
@@ -95,7 +93,7 @@ export default function SignUp() {
     <>
       <div className="container">
         <div className="row">
-          <div className="col-5 mx-auto">
+          <div className="col-10 col-md-8 col-lg-5 mx-auto">
             <div className="authForm p-4 rounded shadow-lg">
               <h4 className='text-capitalize mb-4'>Sign <span className='text-primary'>Up</span></h4>
               <form onSubmit={formHandler}>
@@ -150,7 +148,11 @@ export default function SignUp() {
                   </div>
                   <div className="col-12">
                     <div className="form-group mb-3 mt-2">
-                      <input type="submit" className="btn btn-primary form-control" value="Sign up" />
+                      <input type="submit"
+                        className="btn btn-primary form-control"
+                        value="Sign up"
+                        disabled={uploadProgress !== null && uploadProgress < 100}
+                      />
                     </div>
                   </div>
                 </div>

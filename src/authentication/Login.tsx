@@ -1,14 +1,16 @@
-import React,{useState} from 'react'
+import React,{useState, useContext} from 'react'
 import { Link } from "react-router-dom"
+import { GlobalContextProvider } from '../contextAPI/GlobalContext';
 import { BsFillEnvelopeFill,BsFillKeyFill,BsFillEyeFill,BsFillEyeSlashFill } from "react-icons/bs";
 import "../assets/css/authForm.scss"
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState("password")
     const [eyeIcon, setEyeIcon] = useState(<BsFillEyeSlashFill />)
-    const [inputs, setInputs] = useState([]);
+    const [inputs, setInputs] = useState<any>([]);
 
-    console.log(inputs)
+    const {email, password} = inputs; //Destructure data form inputs
+    const {login}:any = useContext(GlobalContextProvider) //Import Login fuction form Context Api
 
     // Functionality for Show and Hide Password
     const passwordShowToggle = () => {
@@ -24,18 +26,19 @@ export default function Login() {
     // Collect value from from
     const submitHandle = (e: React.SyntheticEvent) => {
         e.preventDefault();
+        login(email, password);
     }
 
     const inputHandle = (e:any) => {
         let name: string = e.target.name;
         let value: (string | number) = e.target.value;
-        setInputs( prev => ({...prev, [name]: value}))
+        setInputs( (prev:any) => ({...prev, [name]: value}))
     }
     return (
         <>
             <div className="container">
                 <div className="row">
-                    <div className="col-4 offset-4">
+                    <div className="col-10 col-md-8 col-lg-4 mx-auto">
                         <div className="authForm p-4 rounded shadow-lg">
                             <h4 className='text-capitalize mb-4'>Login <span className='text-primary'>here</span></h4>
                             <form onSubmit={submitHandle}>
