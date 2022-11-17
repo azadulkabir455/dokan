@@ -21,7 +21,6 @@ const GlobalContextContainer = ({ children }: any) => {
 
   // Authentication Functionality
   const [currentUser, setCurrentUser] = useState<any[]>([]);
-
   // Sign up Function
   const signUp = async (email: string, password: any, data: any[]) => {
     await createUserWithEmailAndPassword(auth, email, password).then(async (authenticateUser) => {

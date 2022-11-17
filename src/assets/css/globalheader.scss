@@ -1,0 +1,95 @@
+@import "./global.scss";
+
+.mynavbar {
+    .navbar-brand {
+        font-family: $logoFont;
+        text-transform: uppercase;
+        font-size: 24px;
+    }
+    .middleMenu {
+        .nav-link {
+            width: 40px;
+            height: 40px;
+            background-color: transparentize($whiteColor, .9);
+            border-radius: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right:3px;
+            @extend %transition;
+            &:hover {
+                background-color: transparentize($whiteColor, .7);
+            }
+            svg {
+                font-size: 18px;
+            }
+        }
+        .nav-link.active {
+            background-color: transparentize($whiteColor, .7);
+        }
+    }
+    .cart {
+        display: flex;
+        align-items: center;
+        .nav-link {
+            position: relative;
+            margin-right: 5px;
+            .totalProduct {
+                padding: 3px;
+                min-width: 23px;
+                border-radius: 100px;
+                display: inline-block;
+                text-align: center;
+                font-size: 12px !important;
+                background-color: #ff7851;
+                position: absolute;
+                left: 20px;
+                top: 0px;
+            }
+            svg {
+                font-size: 18px;
+            }
+        }
+        .profileImg {
+            width: 30px;
+            height: 30px;
+            border-radius: 100px;
+            object-fit: cover;
+            object-position: top;
+        }
+    }
+    @media only screen and (max-width: 992px) {
+        .middleMenu {
+            .nav-link {
+                width: auto;
+                height: auto;
+                background-color: transparent !important;
+                display: flex;
+                align-items: center;
+                justify-content: unset;
+                .menuText {
+                    margin-left: 8px;
+                }
+            }
+        }
+        .cart {
+            display: flex;
+            flex-direction: row-reverse;
+            .nav-link {
+                svg {
+                    margin-left: 10px
+                }
+                .totalProduct {
+                    left: 20px;
+                }
+            }
+            .profileImg {
+                margin-left: auto;
+            }
+        }
+        .dropdown-menu {
+            position: absolute !important;
+        }
+    }
+}
+
