@@ -17,7 +17,7 @@ export default function Routers() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/product" element={<ProtectedRoute><Product /></ProtectedRoute>} />
+      <Route path="/product" element={<Product />} />
       <Route path="/addtocart" element={<Cart />} />
       <Route path="/addblog" element={<AddBlog />} />
       <Route path="/addproduct" element={<AddProduct />} />
