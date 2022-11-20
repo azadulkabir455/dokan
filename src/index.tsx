@@ -9,8 +9,8 @@ import App from './App';
 // For Bootstrap and StyleSheet
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootswatch/dist/minty/bootstrap.min.css"
-import "./assets/css/global.scss"
 import "bootstrap/dist/js/bootstrap.bundle.min.js"
+import "./assets/css/global.scss"
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

@@ -114,9 +114,9 @@ export default function SignUp() {
                         <span className="input-group-text"><BsPersonLinesFill /></span>
                         <select className="form-select" id="role" name="role" value={role} onChange={roleHandle}>
                           <option value="default">Select your role</option>
-                          <option value="reader">Reader</option>
-                          <option value="blogger">Blogger</option>
-                          <option value="shopkeeper">Shop Keeper</option>
+                          <option value="user">User</option>
+                          <option value="moderator">Moderator</option>
+                          <option value="admin">Admin</option>
                         </select>
                       </div>
                     </div>
