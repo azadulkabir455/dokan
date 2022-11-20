@@ -1,7 +1,8 @@
-import React from 'react';
+import React,{FC} from 'react';
 import GlobalHeader from './component/globalheader/GlobalHeader';
 import Routers from './routers/Routers';
-function App() {
+
+const App: FC = () => {
   return (
     <>
     <GlobalHeader />
