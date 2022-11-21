@@ -1,8 +1,10 @@
-import { useContext,useState } from "react";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { GlobalContextProvider } from "../../contextAPI/GlobalContext"
 import { database } from "../../firebase-config";
-import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs} from "firebase/firestore";
+
+// import { useContext,useState } from "react";
+// import { GlobalContextProvider } from "../../contextAPI/GlobalContext"
+// import { useSelector } from "react-redux";
 
 
 
@@ -13,14 +15,13 @@ const getUsers: any = createAsyncThunk("users", async () => {
     return users;
 })
 
-const getUser: any = createAsyncThunk("user", async () => {
-    const { currentUser }: any = useContext(GlobalContextProvider);
-    const userRef = doc(database, "userProfiles", 'OcOq3AE1hTcb4kc0Oc95pv1lB6s1')
-    const userData = await getDoc(userRef);
-    return userData;
-})
+// const getUser: any = createAsyncThunk("user", async () => {
+//     const { currentUser }: any = useContext(GlobalContextProvider);
+//     const {users} = useSelector((state:any) => state.user);
+//     const userData = users.filter((user:any) => user.id === currentUser.uid)
+//     return userData;
+// })
 
 export {
-    getUsers,
-    getUser
+    getUsers
 }

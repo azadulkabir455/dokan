@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { GlobalContextProvider } from '../contextAPI/GlobalContext'
-import { BsSearch, BsThreeDotsVertical } from "react-icons/bs";
+import { BsSearch, BsThreeDotsVertical,BsLayersHalf,BsCardList, BsCurrencyDollar  } from "react-icons/bs";
 import "../assets/css/product.scss"
 
 export default function Product() {
@@ -204,11 +204,67 @@ export default function Product() {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+              <h1 className="modal-title fs-5" id="exampleModalLabel">Edit Product</h1>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
-              ...
+              <form>
+                <div className="row  gx-3">
+                  <div className="col-12">
+                    <div className="form-group mb-3">
+                      <label htmlFor="name" className="form-label">Product Title :</label>
+                      <div className="input-group">
+                        <span className="input-group-text"><BsLayersHalf /></span>
+                        <input type="text" className="form-control" id="name" name="name" placeholder="Write your product name" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-lg-6">
+                    <div className="form-group mb-3">
+                      <label htmlFor="role" className="form-label">Product Categories:</label>
+                      <div className="input-group">
+                        <span className="input-group-text"><BsCardList /></span>
+                        <select className="form-select" id="role" name="role" >
+                          <option value="default">Select Categories</option>
+                          <option value="admin">Cloth</option>
+                          <option value="user">Groceries</option>
+                          <option value="admin">Electronics Device</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-lg-6">
+                    <div className="form-group mb-3">
+                      <label htmlFor="formFile" className="form-label">Product Image :</label>
+                      <input className="form-control" type="file" id="formFile" />
+                    </div>
+                  </div>
+                  <div className="col-12 col-lg-6">
+                    <div className="form-group mb-3">
+                      <label htmlFor="name" className="form-label">Product Price :</label>
+                      <div className="input-group">
+                        <span className="input-group-text"><BsCurrencyDollar /></span>
+                        <input type="number" className="form-control" id="name" name="name" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-lg-6">
+                    <div className="form-group mb-3">
+                      <label htmlFor="name" className="form-label">Product Discount :</label>
+                      <div className="input-group">
+                        <span className="input-group-text"><BsCurrencyDollar /></span>
+                        <input type="number" className="form-control" id="name" name="name" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-lg-12">
+                    <div className="form-group mb-3">
+                      <label htmlFor="postexerpt" className="form-label">Product Details :</label>
+                      <textarea className="form-control" id="postexerpt" rows={3} placeholder="Write your product details"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>

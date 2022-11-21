@@ -13,7 +13,8 @@ export default function GlobalHeader() {
 
     // Get Data From Redux Store
     const dispatch = useDispatch();
-    const { user, users, loader, error } = useSelector((state: any) => state.users);
+    const {users} = useSelector((state: any) => state.users);
+
     useEffect(() => {
         dispatch(getUsers())
     }, [getUsers])

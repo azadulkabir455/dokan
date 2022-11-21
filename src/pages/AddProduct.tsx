@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { BsLayersHalf,BsCardList, BsCurrencyDollar } from "react-icons/bs";
 export default function AddProduct() {
   return (
     <>
@@ -14,7 +14,7 @@ export default function AddProduct() {
                     <div className="form-group mb-3">
                       <label htmlFor="name" className="form-label">Product Title :</label>
                       <div className="input-group">
-                        <span className="input-group-text">@</span>
+                        <span className="input-group-text"><BsLayersHalf /></span>
                         <input type="text" className="form-control" id="name" name="name" placeholder="Write your product name" />
                       </div>
                     </div>
@@ -23,7 +23,7 @@ export default function AddProduct() {
                     <div className="form-group mb-3">
                       <label htmlFor="role" className="form-label">Product Categories:</label>
                       <div className="input-group">
-                        <span className="input-group-text">@</span>
+                        <span className="input-group-text"><BsCardList /></span>
                         <select className="form-select" id="role" name="role" >
                           <option value="default">Select Categories</option>
                           <option value="admin">Cloth</option>
@@ -43,7 +43,7 @@ export default function AddProduct() {
                     <div className="form-group mb-3">
                       <label htmlFor="name" className="form-label">Product Price :</label>
                       <div className="input-group">
-                        <span className="input-group-text">@</span>
+                        <span className="input-group-text"><BsCurrencyDollar /></span>
                         <input type="number" className="form-control" id="name" name="name" />
                       </div>
                     </div>
@@ -52,7 +52,7 @@ export default function AddProduct() {
                     <div className="form-group mb-3">
                       <label htmlFor="name" className="form-label">Product Discount :</label>
                       <div className="input-group">
-                        <span className="input-group-text">@</span>
+                        <span className="input-group-text"><BsCurrencyDollar /></span>
                         <input type="number" className="form-control" id="name" name="name" />
                       </div>
                     </div>

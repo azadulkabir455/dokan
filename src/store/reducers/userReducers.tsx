@@ -1,16 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUser, getUsers } from "../action/userAction";
+import { getUsers } from "../action/userAction";
 
 const userReducers = createSlice({
   name: "users",
   initialState: {
-    users: [{ name: "akash" }, { name: "azad" }],
-    user: [{name:"akash"}],
+    users: [],
+    user: {},
     error: {},
     loader: false,
-
+    
   },
-  reducers: {},
+  reducers: {
+    // getUser:(state,action) => {
+    //   const userData = state.users.filter((user:any) => user.id === action.payload);
+    //   console.log(action.payload)
+    //   state.user = {...state.user, userData}
+    // }
+  },
   extraReducers: {
     [getUsers.pending]: (state, action) => {
       state.loader = true;
@@ -22,20 +28,9 @@ const userReducers = createSlice({
     [getUsers.error]: (state, action) => {
       state.loader = false;
       state.error = action.payload;
-    },
-
-    [getUser.pending]: (state, action) => {
-      state.loader = true;
-    },
-    [getUser.fulfilled]: (state, action) => {
-      state.loader = false;
-      state.user = action.payload;
-    },
-    [getUser.error]: (state, action) => {
-      state.loader = false;
-      state.error = action.payload;
     }
   }
 })
 
+// export const {getUser} = userReducers.actions;
 export default userReducers.reducer
