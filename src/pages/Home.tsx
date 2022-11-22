@@ -3,10 +3,21 @@ import { GlobalContextProvider } from '../contextAPI/GlobalContext'
 import { BsSearch, BsThreeDotsVertical, BsLayersHalf, BsCardList } from "react-icons/bs";
 import { useDispatch, useSelector } from 'react-redux';
 import { getPosts } from '../store/action/postAction';
-import { deletePost, searchPosts, filterPosts } from '../store/reducers/postReducers';
+import { deletePost, editPost, searchPosts, filterPosts } from '../store/reducers/postReducers';
 import "../assets/css/home.scss"
+import { idText } from 'typescript';
 
 export default function Home() {
+  // Current User form Context Api
+  const {currentUser}:any = useContext(GlobalContextProvider)
+  // For Post Edit useState
+  const [postName, setPostName] = useState<string>('')
+  const [postCategories, setPostCategories] = useState<string>('defaultValue')
+  const [post, setPost] = useState<string>("Write your post")
+  const [id, setId] = useState<number | null>(null)
+  const editPostCombineData = { postName, postCategories, post, id }
+
+  // For filtering
   const [checkValue, setCheckValue] = useState<any[]>([]);
 
   const dispatch = useDispatch()
@@ -14,11 +25,21 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(getPosts());
-  }, [getPosts])
+  }, [getPosts, posts])
 
   // Function for delete Post
   const deleteSinglePost: any = (id: any) => {
     dispatch(deletePost(id))
+  }
+  // Function for Prefill and edit post
+  const prefillPost = (name: string, categories: string, post: string, id: number) => {
+    setPostName(name);
+    setPostCategories(categories);
+    setPost(post);
+    setId(id);
+  }
+  const editPostData = () => {
+    dispatch(editPost(editPostCombineData));
   }
   // Extract Time from Timestamp
   const getDate = (date: any) => {
@@ -50,7 +71,7 @@ export default function Home() {
     // }else {
     //   setCheckValue(checkValue.filter((e) => (e !== value)))
     // }
-    dispatch(filterPosts({checkValue}))
+    dispatch(filterPosts({ checkValue }))
   }
   return (
     <>
@@ -119,21 +140,37 @@ export default function Home() {
                     </div>
                   </div>
                   <img src={post.imgUrl} alt="" className='rounded mb-4' />
-                  <h3 className='text-capitalize'>{post.postName}</h3>
-                  <p className='mb-4'>{getPostContentShort(post.post)} <button className='btn btn-primary btn-sm'>Read more</button></p>
+                  <div className="titleContet d-flex align-items-start">
+                    <h3 className='text-capitalize'>{post.postName} </h3>
+                    <small className='badge bg-secondary text-capitalize ms-2 px-2 pb-2 pt-1 rounded-pill'>{post.postCategories}</small>
+                  </div>
+                  <p className='mb-4'>{getPostContentShort(post.post)} <strong className='link-primary text-bold'>Read more</strong></p>
                   <hr />
                   <div className="blogActivity d-flex justify-content-between">
                     <div className="likeComment">
                       Like / Comment
                     </div>
                     <div className="blogAction">
-                      <div className="dropdown">
-                        <span data-bs-toggle="dropdown"><BsThreeDotsVertical /></span>
-                        <ul className="dropdown-menu">
-                          <li><a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal">Edit</a></li>
-                          <li><span className="dropdown-item" onClick={() => deleteSinglePost(post.id)}>Delete</span></li>
-                        </ul>
-                      </div>
+                      {
+                        post.userDetails.id === currentUser.uid ?
+                          <div className="dropdown">
+                            <span data-bs-toggle="dropdown"><BsThreeDotsVertical /></span>
+                            <ul className="dropdown-menu">
+                              <li>
+                                <span
+                                  className="dropdown-item"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#editModal"
+                                  onClick={() => prefillPost(post.postName, post.postCategories, post.post, post.id)}
+                                >
+                                  Edit
+                                </span>
+                              </li>
+                              <li><span className="dropdown-item" onClick={() => deleteSinglePost(post.id)}>Delete</span></li>
+                            </ul>
+                          </div> :
+                          ""
+                      }
                     </div>
                   </div>
                 </div>
@@ -148,7 +185,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Modal */}
+      {/*Edit Post Modal */}
       <div className="modal fade" id="editModal">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -164,43 +201,48 @@ export default function Home() {
                       <label htmlFor="name" className="form-label">Post Title :</label>
                       <div className="input-group">
                         <span className="input-group-text"><BsLayersHalf /></span>
-                        <input type="text" className="form-control" id="name" name="name" placeholder="Write your blog name" />
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="name"
+                          name="name"
+                          placeholder="Write your blog name"
+                          value={postName}
+                          onChange={(e) => setPostName(e.target.value)} />
                       </div>
                     </div>
                   </div>
-                  <div className="col-12 col-lg-6">
+                  <div className="col-12">
                     <div className="form-group mb-3">
                       <label htmlFor="role" className="form-label">Post Categories :</label>
                       <div className="input-group">
                         <span className="input-group-text"><BsCardList /></span>
-                        <select className="form-select" id="role" name="role" >
-                          <option value="default">Select Categories</option>
-                          <option value="admin">Travel</option>
-                          <option value="admin">Science</option>
-                          <option value="user">Education</option>
-                          <option value="moderator">Technology</option>
+                        <select className="form-select" id="role" name="categories" value={postCategories} onChange={(e) => setPostCategories(e.target.value)}>
+                          <option value="defaultValue">Select Categories</option>
+                          <option value="travel">Travel</option>
+                          <option value="science">Science</option>
+                          <option value="education">Education</option>
+                          <option value="technology">Technology</option>
                         </select>
                       </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-lg-6">
-                    <div className="form-group mb-3">
-                      <label htmlFor="formFile" className="form-label">Post Image :</label>
-                      <input className="form-control" type="file" id="formFile" />
                     </div>
                   </div>
                   <div className="col-12 col-lg-12">
                     <div className="form-group mb-3">
                       <label htmlFor="postexerpt" className="form-label">Post :</label>
-                      <textarea className="form-control" id="postexerpt" rows={5} placeholder="Write your post"></textarea>
+                      <textarea
+                        className="form-control"
+                        id="postexerpt" rows={5}
+                        placeholder="Write your post"
+                        value={post}
+                        onChange={(e) => setPost(e.target.value)} />
                     </div>
                   </div>
                 </div>
               </form>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" className="btn btn-primary">Save changes</button>
+              <button type="button" className="btn btn-primary" onClick={editPostData} data-bs-dismiss="modal">Save changes</button>
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { database } from "../../firebase-config";
-import { collection, addDoc, doc, deleteDoc } from "firebase/firestore"
+import { collection, addDoc, doc, deleteDoc,updateDoc } from "firebase/firestore"
 import { getPosts } from "../action/postAction";
 
 const postReducers = createSlice({
@@ -32,12 +32,20 @@ const postReducers = createSlice({
                 })
             }
         },
+        editPost: (state, action) => {
+            const singlePostRef = doc(database, "posts", action.payload.id);
+            updateDoc(singlePostRef, action.payload).then(() => {
+                console.log("Post update succesfully");
+            }).catch((error) => {
+                console.log(error.message);
+            })
+        },
         searchPosts: (state, action) => {
             state.posts = state.postsContaner.filter((post: any) => post.postName.toLowerCase().includes(action.payload));
         },
         filterPosts: (state, action) => {
             // state.posts = state.postsContaner.filter((post:any))
-            console.log(action.payload)
+            // console.log(action.payload)
         }
     },
     extraReducers: {
@@ -56,5 +64,5 @@ const postReducers = createSlice({
     }
 })
 
-export const { addPost, deletePost, searchPosts, filterPosts } = postReducers.actions;
+export const { addPost, deletePost, editPost, searchPosts, filterPosts } = postReducers.actions;
 export default postReducers.reducer;
