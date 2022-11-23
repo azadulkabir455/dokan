@@ -1,10 +1,20 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
+import { BsSearch, BsThreeDotsVertical, BsLayersHalf, BsCardList, BsCurrencyDollar } from "react-icons/bs";
+import currencyFormatter from 'currency-formatter';
 import { GlobalContextProvider } from '../contextAPI/GlobalContext'
-import { BsSearch, BsThreeDotsVertical,BsLayersHalf,BsCardList, BsCurrencyDollar  } from "react-icons/bs";
+import { useDispatch, useSelector } from 'react-redux';
+import { getProducts } from '../store/action/productAction';
 import "../assets/css/product.scss"
 
 export default function Product() {
   const { logout }: any = useContext(GlobalContextProvider);
+
+  const { products } = useSelector((state: any) => state.products)
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [getProducts])
+  console.log(products)
   return (
     <>
       <div className="container blogContainer ">
@@ -69,126 +79,41 @@ export default function Product() {
           </div>
           <div className="col-12 col-lg-6">
             <div className="row g-3">
-              <div className="col-12 col-lg-6">
-                <div className="singleProduct p-4 shadow rounded">
-                  <img src="./user.png" alt="" className='rounded mb-4' />
-                  <h5>Demo Product</h5>
-                  <div className="productDetails d-flex justify-content-between">
-                    <div className="actualPrice">
-                      <span className='text-decoration-line-through '><b className='text-info '>Prcie:</b> 20</span>
-                      <span className='text-primary ps-3'>3%</span>
-                    </div>
-                    <div className="discountPrice">
-                      <span><b className='text-danger '>Now: </b> 18</span>
-                    </div>
-                  </div>
-                  <hr />
-                  <div className="blogActivity d-flex justify-content-between">
-                    <div className="likeComment">
-                      <button className="btn btn-info btn-sm rounded-pill">Add to Cart</button>
-                    </div>
-                    <div className="blogAction">
-                      <div className="dropdown">
-                        <span data-bs-toggle="dropdown"><BsThreeDotsVertical /></span>
-                        <ul className="dropdown-menu">
-                          <li><a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal">Edit</a></li>
-                          <li><a className="dropdown-item" href="#">Delete</a></li>
-                        </ul>
+              {
+                products.map((product: any) =>
+                  <div className="col-12 col-lg-6" key={product.id}>
+                    <div className="singleProduct p-4 shadow rounded">
+                      <img src={product.productImgUrl} alt="" className='rounded mb-4' />
+                      <h5 className='m-0 text-capitalize'>{product.name}</h5>
+                      <small className='d-block pb-2'>Shop Owner: <span className='text-warning'> {product.userDetails.name}</span></small>
+                      <div className="productDetails d-flex justify-content-between">
+                        <div className="actualPrice">
+                          <span className='text-decoration-line-through '><b className='text-info '>Prcie:</b> {currencyFormatter.format(product.price, { code: 'USD' })}</span>
+                          <small className='text-danger ps-2'>{product.discount}%</small>
+                        </div>
+                        <div className="discountPrice">
+                          <span><b className='text-info '>Now: </b> {currencyFormatter.format(product.discountPrice, { code: 'USD' })}</span>
+                        </div>
+                      </div>
+                      <hr />
+                      <div className="blogActivity d-flex justify-content-between">
+                        <div className="likeComment">
+                          <button className="btn btn-info btn-sm rounded-pill">Add to Cart</button>
+                        </div>
+                        <div className="blogAction">
+                          <div className="dropdown">
+                            <span data-bs-toggle="dropdown"><BsThreeDotsVertical /></span>
+                            <ul className="dropdown-menu">
+                              <li><a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal">Edit</a></li>
+                              <li><a className="dropdown-item" href="#">Delete</a></li>
+                            </ul>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="col-12 col-lg-6">
-                <div className="singleProduct p-4 shadow rounded">
-                  <img src="./user.png" alt="" className='rounded mb-4' />
-                  <h5>Demo Product</h5>
-                  <div className="productDetails d-flex justify-content-between">
-                    <div className="actualPrice">
-                      <span className='text-decoration-line-through '><b className='text-info '>Prcie:</b> 20</span>
-                      <span className='text-primary ps-3'>3%</span>
-                    </div>
-                    <div className="discountPrice">
-                      <span><b className='text-danger '>Now: </b> 18</span>
-                    </div>
-                  </div>
-                  <hr />
-                  <div className="blogActivity d-flex justify-content-between">
-                    <div className="likeComment">
-                      <button className="btn btn-info btn-sm rounded-pill">Add to Cart</button>
-                    </div>
-                    <div className="blogAction">
-                      <div className="dropdown">
-                        <span data-bs-toggle="dropdown"><BsThreeDotsVertical /></span>
-                        <ul className="dropdown-menu">
-                          <li><a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal">Edit</a></li>
-                          <li><a className="dropdown-item" href="#">Delete</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-12 col-lg-6">
-                <div className="singleProduct p-4 mb-4 shadow rounded">
-                  <img src="./user.png" alt="" className='rounded mb-4' />
-                  <h5>Demo Product</h5>
-                  <div className="productDetails d-flex justify-content-between">
-                    <div className="actualPrice">
-                      <span className='text-decoration-line-through '><b className='text-info '>Prcie:</b> 20</span>
-                      <span className='text-primary ps-3'>3%</span>
-                    </div>
-                    <div className="discountPrice">
-                      <span><b className='text-danger '>Now: </b> 18</span>
-                    </div>
-                  </div>
-                  <hr />
-                  <div className="blogActivity d-flex justify-content-between">
-                    <div className="likeComment">
-                      <button className="btn btn-info btn-sm rounded-pill">Add to Cart</button>
-                    </div>
-                    <div className="blogAction">
-                      <div className="dropdown">
-                        <span data-bs-toggle="dropdown"><BsThreeDotsVertical /></span>
-                        <ul className="dropdown-menu">
-                          <li><a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal">Edit</a></li>
-                          <li><a className="dropdown-item" href="#">Delete</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-12 col-lg-6">
-                <div className="singleProduct p-4 mb-4 shadow rounded">
-                  <img src="./user.png" alt="" className='rounded mb-4' />
-                  <h5>Demo Product</h5>
-                  <div className="productDetails d-flex justify-content-between">
-                    <div className="actualPrice">
-                      <span className='text-decoration-line-through '><b className='text-info '>Prcie:</b> 20</span>
-                      <span className='text-primary ps-3'>3%</span>
-                    </div>
-                    <div className="discountPrice">
-                      <span><b className='text-danger '>Now: </b> 18</span>
-                    </div>
-                  </div>
-                  <hr />
-                  <div className="blogActivity d-flex justify-content-between">
-                    <div className="likeComment">
-                      <button className="btn btn-info btn-sm rounded-pill">Add to Cart</button>
-                    </div>
-                    <div className="blogAction">
-                      <div className="dropdown">
-                        <span data-bs-toggle="dropdown"><BsThreeDotsVertical /></span>
-                        <ul className="dropdown-menu">
-                          <li><a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal">Edit</a></li>
-                          <li><a className="dropdown-item" href="#">Delete</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                )
+              }
             </div>
           </div>
           <div className="col-12 col-lg-3">
@@ -219,7 +144,7 @@ export default function Product() {
                       </div>
                     </div>
                   </div>
-                  <div className="col-12 col-lg-6">
+                  <div className="col-12">
                     <div className="form-group mb-3">
                       <label htmlFor="role" className="form-label">Product Categories:</label>
                       <div className="input-group">
@@ -231,12 +156,6 @@ export default function Product() {
                           <option value="admin">Electronics Device</option>
                         </select>
                       </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-lg-6">
-                    <div className="form-group mb-3">
-                      <label htmlFor="formFile" className="form-label">Product Image :</label>
-                      <input className="form-control" type="file" id="formFile" />
                     </div>
                   </div>
                   <div className="col-12 col-lg-6">
@@ -267,8 +186,7 @@ export default function Product() {
               </form>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" className="btn btn-primary">Save changes</button>
+              <button type="button" className="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
             </div>
           </div>
         </div>

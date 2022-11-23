@@ -78,6 +78,7 @@ const AddBlog: FC = () => {
 
 
   const combinePostData = {postName, postCategories, imgUrl, post, postDate: serverTimestamp(), userDetails}
+  console.log(combinePostData)
   const submitHandler = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(addPost({...combinePostData}))

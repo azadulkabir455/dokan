@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, ChangeEvent, useState } from 'react'
 import { GlobalContextProvider } from '../contextAPI/GlobalContext'
-import { BsSearch, BsThreeDotsVertical, BsLayersHalf, BsCardList } from "react-icons/bs";
+import { BsSearch, BsThreeDotsVertical, BsLayersHalf, BsCardList, BsFillHandThumbsUpFill } from "react-icons/bs";
 import { useDispatch, useSelector } from 'react-redux';
 import { getPosts } from '../store/action/postAction';
 import { deletePost, editPost, searchPosts, filterPosts } from '../store/reducers/postReducers';
@@ -9,7 +9,7 @@ import { idText } from 'typescript';
 
 export default function Home() {
   // Current User form Context Api
-  const {currentUser}:any = useContext(GlobalContextProvider)
+  const { currentUser }: any = useContext(GlobalContextProvider)
   // For Post Edit useState
   const [postName, setPostName] = useState<string>('')
   const [postCategories, setPostCategories] = useState<string>('defaultValue')
@@ -25,7 +25,7 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(getPosts());
-  }, [getPosts, posts])
+  }, [getPosts])
 
   // Function for delete Post
   const deleteSinglePost: any = (id: any) => {
@@ -56,7 +56,15 @@ export default function Home() {
   const getPostContentShort: any = (content: string) => {
     return content.slice(0, 130) + "..."
   }
-
+  // Fucntion for comment hide and show
+  const toggleComment = () => {
+    let commentForm: any = document.querySelector("#commentForm");
+    // if (commentForm.style.display === "none") {
+    //   commentForm.style.display = "block";
+    // } else {
+    //   commentForm.style.display = "none";
+    // }
+  }
   // Function for Searching post
   const findPost = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(searchPosts(e.target.value));
@@ -66,12 +74,14 @@ export default function Home() {
   const checkHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const checked = e.target.checked;
-    // if(checked) {
-    //   setCheckValue([...checkValue, value]);
-    // }else {
-    //   setCheckValue(checkValue.filter((e) => (e !== value)))
-    // }
-    dispatch(filterPosts({ checkValue }))
+    if(checked) {
+      setCheckValue([...checkValue, value]);
+      dispatch(filterPosts({ checkValue }))
+    }else {
+      setCheckValue(checkValue.filter((e) => (e !== value)))
+      dispatch(filterPosts({ checkValue }))
+    }
+    
   }
   return (
     <>
@@ -129,7 +139,7 @@ export default function Home() {
           <div className="col-12 col-lg-6">
             {
               posts.map((post: any) =>
-                <div className="singleBlog p-4 mb-4 shadow rounded">
+                <div className="singleBlog p-4 mb-4 shadow rounded" key={post.id}>
                   <div className="user d-flex mb-3">
                     <div className="userImg ">
                       <img src={post.userDetails.userImgUrl} alt="" className='rounded-circle' />
@@ -147,8 +157,13 @@ export default function Home() {
                   <p className='mb-4'>{getPostContentShort(post.post)} <strong className='link-primary text-bold'>Read more</strong></p>
                   <hr />
                   <div className="blogActivity d-flex justify-content-between">
-                    <div className="likeComment">
-                      Like / Comment
+                    <div className="likeComment d-flex">
+                      <div className="like">
+                        <button className='btn btn-sm btn-primary rounded-pill'><BsFillHandThumbsUpFill /> Like</button>
+                      </div>
+                      <div className="comment ps-1">
+                        <button className='btn btn-sm btn-primary rounded-pill' onClick={toggleComment}>comment</button>
+                      </div>
                     </div>
                     <div className="blogAction">
                       {
@@ -173,6 +188,14 @@ export default function Home() {
                       }
                     </div>
                   </div>
+                  {/* <div className="commentForm mt-4" id="commentForm">
+                    <form>
+                      <div className="form-group mb-2">
+                        <input type="text" className="form-control" name="name" placeholder="Add Your Comment" />
+                      </div>
+                      <button type="submit" className='btn btn-sm btn-primary'>Add comment..</button>
+                    </form>
+                  </div> */}
                 </div>
               )
             }

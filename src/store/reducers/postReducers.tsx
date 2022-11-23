@@ -44,8 +44,8 @@ const postReducers = createSlice({
             state.posts = state.postsContaner.filter((post: any) => post.postName.toLowerCase().includes(action.payload));
         },
         filterPosts: (state, action) => {
-            // state.posts = state.postsContaner.filter((post:any))
-            // console.log(action.payload)
+            // state.posts = state.postsContaner.filter((post:any)=> post.postCategories === action.payload)
+            console.log(action.payload)
         }
     },
     extraReducers: {
