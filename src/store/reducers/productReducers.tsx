@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { database } from "../../firebase-config";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { getProducts } from "../action/productAction";
+import { Action } from "@remix-run/router";
 
 
 const productReducers = createSlice({
@@ -20,6 +21,22 @@ const productReducers = createSlice({
             }).catch((error) => {
                 console.log(error.message);
             })
+        },
+        editProduct: (state, action) => {
+            const productRef = doc(database, "products", action.payload.id);
+            updateDoc(productRef, action.payload).then(() => {
+                console.log("Product update successfully");
+            }).catch((error) => {
+                console.log(error.message)
+            })
+        },
+        deleteProduct: (state, action) => {
+            const productRef = doc(database,"products",action.payload);
+            deleteDoc(productRef).then(() => {
+                console.log("Delete Data successfully")
+            }).catch((error) => {
+                console.log(error.message)
+            })
         }
     },
     extraReducers: {
@@ -37,5 +54,5 @@ const productReducers = createSlice({
     }
 })
 
-export const {addProduct} = productReducers.actions;
+export const {addProduct, editProduct, deleteProduct} = productReducers.actions;
 export default productReducers.reducer;

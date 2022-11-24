@@ -1,20 +1,64 @@
-import React, { useContext, useEffect } from 'react'
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { BsSearch, BsThreeDotsVertical, BsLayersHalf, BsCardList, BsCurrencyDollar } from "react-icons/bs";
 import currencyFormatter from 'currency-formatter';
 import { GlobalContextProvider } from '../contextAPI/GlobalContext'
 import { useDispatch, useSelector } from 'react-redux';
+import { editProduct, deleteProduct } from '../store/reducers/productReducers';
 import { getProducts } from '../store/action/productAction';
+import { Link } from 'react-router-dom';
 import "../assets/css/product.scss"
 
 export default function Product() {
+  const [inputs, setInputs] = useState<any>({});
+  const [productType, setProductTyep] = useState<string>("default");
+  const [productInfo, setProductInfo] = useState<string>("Write something about the product");
+  const [id, setId] = useState<number | null>(null)
+
+  const { price, discount } = inputs;
+
   const { logout }: any = useContext(GlobalContextProvider);
 
-  const { products } = useSelector((state: any) => state.products)
   const dispatch = useDispatch();
+  // Get Products Item
+  const { products, loading } = useSelector((state: any) => state.products)
   useEffect(() => {
     dispatch(getProducts());
   }, [getProducts])
-  console.log(products)
+
+  // Function For Prefill product
+  const preFillProduct = (name: string, type: string, price: number, discount: number, info: string, id: number) => {
+    setInputs({ name: name, price: price, discount: discount });
+    setProductTyep(type);
+    setProductInfo(info)
+    setId(id);
+  }
+
+
+  // Combine Data for Editing
+  const discountPrice = price - (discount / 100) * price
+  const combineDataForEditing = { ...inputs, productType, productInfo, discountPrice, id }
+
+  // Get Data from Modal Form
+  const submitHandler = (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  }
+
+  const inputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    let name = e.target.name;
+    let value = e.target.value;
+
+    setInputs((prev: any) => ({ ...prev, [name]: value }))
+  }
+
+  // Fucntion for data update
+  const updateProductData = () => {
+    dispatch(editProduct(combineDataForEditing))
+  }
+
+  // Function for data delete
+  const deleteProductData = (id: number) => {
+    dispatch(deleteProduct(id))
+  }
   return (
     <>
       <div className="container blogContainer ">
@@ -80,39 +124,43 @@ export default function Product() {
           <div className="col-12 col-lg-6">
             <div className="row g-3">
               {
-                products.map((product: any) =>
-                  <div className="col-12 col-lg-6" key={product.id}>
-                    <div className="singleProduct p-4 shadow rounded">
-                      <img src={product.productImgUrl} alt="" className='rounded mb-4' />
-                      <h5 className='m-0 text-capitalize'>{product.name}</h5>
-                      <small className='d-block pb-2'>Shop Owner: <span className='text-warning'> {product.userDetails.name}</span></small>
-                      <div className="productDetails d-flex justify-content-between">
-                        <div className="actualPrice">
-                          <span className='text-decoration-line-through '><b className='text-info '>Prcie:</b> {currencyFormatter.format(product.price, { code: 'USD' })}</span>
-                          <small className='text-danger ps-2'>{product.discount}%</small>
+                loading ?
+                  <>
+                    <h1>Loading Products...</h1>
+                  </> :
+                  products.map((product: any) =>
+                    <div className="col-12 col-lg-6" key={product.id}>
+                      <div className="singleProduct p-4 shadow rounded">
+                        <img src={product.productImgUrl} alt="" className='rounded mb-4' />
+                        <h5 className='m-0 text-capitalize'>{product.name}</h5>
+                        <small className='d-block pb-2'>Shop Owner: <span className='text-warning'> {product.userDetails.name}</span></small>
+                        <div className="productDetails d-flex justify-content-between">
+                          <div className="actualPrice">
+                            <span className='text-decoration-line-through '><b className='text-info '>Prcie:</b> {currencyFormatter.format(product.price, { code: 'USD' })}</span>
+                            <small className='text-danger ps-2'>{product.discount}%</small>
+                          </div>
+                          <div className="discountPrice">
+                            <span><b className='text-info '>Now: </b> {currencyFormatter.format(product.discountPrice, { code: 'USD' })}</span>
+                          </div>
                         </div>
-                        <div className="discountPrice">
-                          <span><b className='text-info '>Now: </b> {currencyFormatter.format(product.discountPrice, { code: 'USD' })}</span>
-                        </div>
-                      </div>
-                      <hr />
-                      <div className="blogActivity d-flex justify-content-between">
-                        <div className="likeComment">
-                          <button className="btn btn-info btn-sm rounded-pill">Add to Cart</button>
-                        </div>
-                        <div className="blogAction">
-                          <div className="dropdown">
-                            <span data-bs-toggle="dropdown"><BsThreeDotsVertical /></span>
-                            <ul className="dropdown-menu">
-                              <li><a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal">Edit</a></li>
-                              <li><a className="dropdown-item" href="#">Delete</a></li>
-                            </ul>
+                        <hr />
+                        <div className="blogActivity d-flex justify-content-between">
+                          <div className="likeComment">
+                            <button className="btn btn-info btn-sm rounded-pill"><Link to={`/products/${product.id}`} className="text-white text-decoration-none">Add to Cart</Link></button>
+                          </div>
+                          <div className="blogAction">
+                            <div className="dropdown">
+                              <span data-bs-toggle="dropdown"><BsThreeDotsVertical /></span>
+                              <ul className="dropdown-menu">
+                                <li><span className="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" onClick={() => preFillProduct(product.name, product.productType, product.price, product.discount, product.productInfo, product.id)}>Edit</span></li>
+                                <li><span className="dropdown-item" onClick={() => deleteProductData(product.id)}>Delete</span></li>
+                              </ul>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )
+                  )
               }
             </div>
           </div>
@@ -133,14 +181,14 @@ export default function Product() {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
-              <form>
+              <form onSubmit={submitHandler}>
                 <div className="row  gx-3">
                   <div className="col-12">
                     <div className="form-group mb-3">
                       <label htmlFor="name" className="form-label">Product Title :</label>
                       <div className="input-group">
                         <span className="input-group-text"><BsLayersHalf /></span>
-                        <input type="text" className="form-control" id="name" name="name" placeholder="Write your product name" />
+                        <input type="text" className="form-control" id="name" name="name" placeholder="Write your product name" value={inputs.name} onChange={inputHandler} />
                       </div>
                     </div>
                   </div>
@@ -149,44 +197,44 @@ export default function Product() {
                       <label htmlFor="role" className="form-label">Product Categories:</label>
                       <div className="input-group">
                         <span className="input-group-text"><BsCardList /></span>
-                        <select className="form-select" id="role" name="role" >
+                        <select className="form-select" id="role" name="role" value={productType} onChange={(e) => setProductTyep(e.target.value)}>
                           <option value="default">Select Categories</option>
-                          <option value="admin">Cloth</option>
-                          <option value="user">Groceries</option>
-                          <option value="admin">Electronics Device</option>
+                          <option value="cloth">Cloth</option>
+                          <option value="groceries">Groceries</option>
+                          <option value="electronics">Electronics Device</option>
                         </select>
                       </div>
                     </div>
                   </div>
                   <div className="col-12 col-lg-6">
                     <div className="form-group mb-3">
-                      <label htmlFor="name" className="form-label">Product Price :</label>
+                      <label htmlFor="price" className="form-label">Product Price :</label>
                       <div className="input-group">
                         <span className="input-group-text"><BsCurrencyDollar /></span>
-                        <input type="number" className="form-control" id="name" name="name" />
+                        <input type="number" className="form-control" id="price" name="price" value={inputs.price} onChange={inputHandler} />
                       </div>
                     </div>
                   </div>
                   <div className="col-12 col-lg-6">
                     <div className="form-group mb-3">
-                      <label htmlFor="name" className="form-label">Product Discount :</label>
+                      <label htmlFor="discount" className="form-label">Product Discount :</label>
                       <div className="input-group">
                         <span className="input-group-text"><BsCurrencyDollar /></span>
-                        <input type="number" className="form-control" id="name" name="name" />
+                        <input type="number" className="form-control" id="discount" name="discount" value={inputs.discount} onChange={inputHandler} />
                       </div>
                     </div>
                   </div>
                   <div className="col-12 col-lg-12">
                     <div className="form-group mb-3">
                       <label htmlFor="postexerpt" className="form-label">Product Details :</label>
-                      <textarea className="form-control" id="postexerpt" rows={3} placeholder="Write your product details"></textarea>
+                      <textarea className="form-control" id="postexerpt" rows={3} placeholder="Write your product details" value={productInfo} onChange={(e) => setProductInfo(e.target.value)} />
                     </div>
                   </div>
                 </div>
               </form>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+              <button type="submit" className="btn btn-primary" data-bs-dismiss="modal" onClick={updateProductData}>Save changes</button>
             </div>
           </div>
         </div>

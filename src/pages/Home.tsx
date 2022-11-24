@@ -21,7 +21,7 @@ export default function Home() {
   const [checkValue, setCheckValue] = useState<any[]>([]);
 
   const dispatch = useDispatch()
-  const { posts } = useSelector((state: any) => state.posts);
+  const { posts, loading } = useSelector((state: any) => state.posts);
 
   useEffect(() => {
     dispatch(getPosts());
@@ -121,7 +121,7 @@ export default function Home() {
                   </div>
                 </form>
               </div>
-              {/* <div className="filterByAuthor p-4 shadow rounded mt-4">
+              <div className="filterByAuthor p-4 shadow rounded mt-4">
                 <h6 className='text-uppercase mb-2'>Filter by <span className='text-primary'>Author</span></h6>
                 <form>
                   <div className="form-check mb-2">
@@ -133,71 +133,73 @@ export default function Home() {
                     <label className="form-check-label" htmlFor="education"> Education</label>
                   </div>
                 </form>
-              </div> */}
+              </div>
             </div>
           </div>
           <div className="col-12 col-lg-6">
             {
+              loading? 
+              <> <h1>Loading Post ...</h1></>:
               posts.map((post: any) =>
-                <div className="singleBlog p-4 mb-4 shadow rounded" key={post.id}>
-                  <div className="user d-flex mb-3">
-                    <div className="userImg ">
-                      <img src={post.userDetails.userImgUrl} alt="" className='rounded-circle' />
-                    </div>
-                    <div className="userInfo ms-3">
-                      <h6 className='m-0'>{post.userDetails.name} <small className='text-primary ps-1'>({post.userDetails.role})</small></h6>
-                      <small className="text-danger ">Date: {getDate(new Date(post.postDate.seconds * 1000))}</small>
-                    </div>
+              <div className="singleBlog p-4 mb-4 shadow rounded" key={post.id}>
+                <div className="user d-flex mb-3">
+                  <div className="userImg ">
+                    <img src={post.userDetails.userImgUrl} alt="" className='rounded-circle' />
                   </div>
-                  <img src={post.imgUrl} alt="" className='rounded mb-4' />
-                  <div className="titleContet d-flex align-items-start">
-                    <h3 className='text-capitalize'>{post.postName} </h3>
-                    <small className='badge bg-secondary text-capitalize ms-2 px-2 pb-2 pt-1 rounded-pill'>{post.postCategories}</small>
+                  <div className="userInfo ms-3">
+                    <h6 className='m-0'>{post.userDetails.name} <small className='text-primary ps-1'>({post.userDetails.role})</small></h6>
+                    <small className="text-danger ">Date: {getDate(new Date(post.postDate.seconds * 1000))}</small>
                   </div>
-                  <p className='mb-4'>{getPostContentShort(post.post)} <strong className='link-primary text-bold'>Read more</strong></p>
-                  <hr />
-                  <div className="blogActivity d-flex justify-content-between">
-                    <div className="likeComment d-flex">
-                      <div className="like">
-                        <button className='btn btn-sm btn-primary rounded-pill'><BsFillHandThumbsUpFill /> Like</button>
-                      </div>
-                      <div className="comment ps-1">
-                        <button className='btn btn-sm btn-primary rounded-pill' onClick={toggleComment}>comment</button>
-                      </div>
-                    </div>
-                    <div className="blogAction">
-                      {
-                        post.userDetails.id === currentUser.uid ?
-                          <div className="dropdown">
-                            <span data-bs-toggle="dropdown"><BsThreeDotsVertical /></span>
-                            <ul className="dropdown-menu">
-                              <li>
-                                <span
-                                  className="dropdown-item"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#editModal"
-                                  onClick={() => prefillPost(post.postName, post.postCategories, post.post, post.id)}
-                                >
-                                  Edit
-                                </span>
-                              </li>
-                              <li><span className="dropdown-item" onClick={() => deleteSinglePost(post.id)}>Delete</span></li>
-                            </ul>
-                          </div> :
-                          ""
-                      }
-                    </div>
-                  </div>
-                  {/* <div className="commentForm mt-4" id="commentForm">
-                    <form>
-                      <div className="form-group mb-2">
-                        <input type="text" className="form-control" name="name" placeholder="Add Your Comment" />
-                      </div>
-                      <button type="submit" className='btn btn-sm btn-primary'>Add comment..</button>
-                    </form>
-                  </div> */}
                 </div>
-              )
+                <img src={post.imgUrl} alt="" className='rounded mb-4' />
+                <div className="titleContet d-flex align-items-start">
+                  <h3 className='text-capitalize'>{post.postName} </h3>
+                  <small className='badge bg-secondary text-capitalize ms-2 px-2 pb-2 pt-1 rounded-pill'>{post.postCategories}</small>
+                </div>
+                <p className='mb-4'>{getPostContentShort(post.post)} <strong className='link-primary text-bold'>Read more</strong></p>
+                <hr />
+                <div className="blogActivity d-flex justify-content-between">
+                  <div className="likeComment d-flex">
+                    <div className="like">
+                      <button className='btn btn-sm btn-primary rounded-pill'><BsFillHandThumbsUpFill /> Like</button>
+                    </div>
+                    <div className="comment ps-1">
+                      <button className='btn btn-sm btn-primary rounded-pill' onClick={toggleComment}>comment</button>
+                    </div>
+                  </div>
+                  <div className="blogAction">
+                    {
+                      post.userDetails.id === currentUser.uid ?
+                        <div className="dropdown">
+                          <span data-bs-toggle="dropdown"><BsThreeDotsVertical /></span>
+                          <ul className="dropdown-menu">
+                            <li>
+                              <span
+                                className="dropdown-item"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editModal"
+                                onClick={() => prefillPost(post.postName, post.postCategories, post.post, post.id)}
+                              >
+                                Edit
+                              </span>
+                            </li>
+                            <li><span className="dropdown-item" onClick={() => deleteSinglePost(post.id)}>Delete</span></li>
+                          </ul>
+                        </div> :
+                        ""
+                    }
+                  </div>
+                </div>
+                {/* <div className="commentForm mt-4" id="commentForm">
+                  <form>
+                    <div className="form-group mb-2">
+                      <input type="text" className="form-control" name="name" placeholder="Add Your Comment" />
+                    </div>
+                    <button type="submit" className='btn btn-sm btn-primary'>Add comment..</button>
+                  </form>
+                </div> */}
+              </div>
+            )
             }
           </div>
           <div className="col-12 col-lg-3">
