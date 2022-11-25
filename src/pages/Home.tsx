@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getPosts } from '../store/action/postAction';
 import { deletePost, editPost, searchPosts, filterPosts } from '../store/reducers/postReducers';
 import "../assets/css/home.scss"
-import { idText } from 'typescript';
 
 export default function Home() {
   // Current User form Context Api

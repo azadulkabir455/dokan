@@ -37,6 +37,9 @@ const productReducers = createSlice({
             }).catch((error) => {
                 console.log(error.message)
             })
+        },
+        getSingleProduct: (state, action) => {
+            state.product = state.products.filter((product:any) => product.id === action.payload)[0]
         }
     },
     extraReducers: {
@@ -54,5 +57,5 @@ const productReducers = createSlice({
     }
 })
 
-export const {addProduct, editProduct, deleteProduct} = productReducers.actions;
+export const {addProduct, editProduct, deleteProduct,getSingleProduct} = productReducers.actions;
 export default productReducers.reducer;

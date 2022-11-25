@@ -86,7 +86,7 @@ const AddBlog: FC = () => {
   return (
     <>
       <div className="container">
-        <div className="row">
+        <div className="row mt-4">
           <div className="col-10 col-md-8 col-lg-6 mx-auto">
             <div className="authForm p-4 rounded shadow-lg">
               <h4 className='text-capitalize mb-4'>Creat Your <span className='text-primary'>Post</span></h4>

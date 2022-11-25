@@ -1,7 +1,6 @@
-import React, { ChangeEvent, useContext, useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { BsSearch, BsThreeDotsVertical, BsLayersHalf, BsCardList, BsCurrencyDollar } from "react-icons/bs";
 import currencyFormatter from 'currency-formatter';
-import { GlobalContextProvider } from '../contextAPI/GlobalContext'
 import { useDispatch, useSelector } from 'react-redux';
 import { editProduct, deleteProduct } from '../store/reducers/productReducers';
 import { getProducts } from '../store/action/productAction';
@@ -15,8 +14,6 @@ export default function Product() {
   const [id, setId] = useState<number | null>(null)
 
   const { price, discount } = inputs;
-
-  const { logout }: any = useContext(GlobalContextProvider);
 
   const dispatch = useDispatch();
   // Get Products Item

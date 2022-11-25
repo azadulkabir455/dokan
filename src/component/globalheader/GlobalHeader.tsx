@@ -64,7 +64,7 @@ export default function GlobalHeader() {
                                             }
                                         </NavLink>
                                         <div className="dropdown-menu">
-                                            <NavLink className="dropdown-item" to="/userprofile">My profile</NavLink>
+                                            <NavLink className="dropdown-item" to="/userprofile/userBlog">My profile</NavLink>
                                             <NavLink className="dropdown-item" to="/addblog">Add blog</NavLink>
                                             <NavLink className="dropdown-item" to="/addproduct">Add product</NavLink>
                                             <div className="dropdown-divider"></div>
