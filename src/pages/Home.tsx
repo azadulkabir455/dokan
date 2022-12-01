@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, ChangeEvent, useState } from 'react'
 import { GlobalContextProvider } from '../contextAPI/GlobalContext'
-import { BsSearch, BsThreeDotsVertical, BsLayersHalf, BsCardList, BsFillHandThumbsUpFill } from "react-icons/bs";
+import { BsThreeDotsVertical, BsLayersHalf, BsCardList, BsFillHandThumbsUpFill } from "react-icons/bs";
+import LikeCount from '../component/likeComponent/LikeCount';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPosts } from '../store/action/postAction';
 import { deletePost, editPost, searchPosts, filterPosts } from '../store/reducers/postReducers';
@@ -24,7 +25,7 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(getPosts());
-  }, [getPosts])
+  },[getPosts])
 
   // Function for delete Post
   const deleteSinglePost: any = (id: any) => {
@@ -55,15 +56,7 @@ export default function Home() {
   const getPostContentShort: any = (content: string) => {
     return content.slice(0, 130) + "..."
   }
-  // Fucntion for comment hide and show
-  const toggleComment = () => {
-    let commentForm: any = document.querySelector("#commentForm");
-    // if (commentForm.style.display === "none") {
-    //   commentForm.style.display = "block";
-    // } else {
-    //   commentForm.style.display = "none";
-    // }
-  }
+
   // Function for Searching post
   const findPost = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(searchPosts(e.target.value));
@@ -160,10 +153,10 @@ export default function Home() {
                 <div className="blogActivity d-flex justify-content-between">
                   <div className="likeComment d-flex">
                     <div className="like">
-                      <button className='btn btn-sm btn-primary rounded-pill'><BsFillHandThumbsUpFill /> Like</button>
+                      <LikeCount id={post.id} likes={post.likes}/>
                     </div>
                     <div className="comment ps-1">
-                      <button className='btn btn-sm btn-primary rounded-pill' onClick={toggleComment}>comment</button>
+                      <button className='btn btn-sm btn-primary rounded-pill'>comment</button>
                     </div>
                   </div>
                   <div className="blogAction">

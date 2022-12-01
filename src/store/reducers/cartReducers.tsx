@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { database } from "../../firebase-config";
 import { doc, updateDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 const cartReducers = createSlice({
     name:"cart",
@@ -21,8 +22,8 @@ const cartReducers = createSlice({
                 const tQuantity: number = state.totalQuantity + quantity;
                 const tProduct: any = [...state.products, product];
                 const productRef = doc(database,"products", product.id)
-                updateDoc(productRef,{quantity:action.payload.quantity}).then(() => {
-                    console.log("Product Update successfully..")
+                updateDoc(productRef,{quantity: quantity}).then(() => {
+                    toast("Product Quantity Update successfully..",{type:"success"});
                 }).catch((error) => {
                     console.log(error.message)
                 })
