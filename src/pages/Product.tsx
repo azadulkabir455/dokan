@@ -67,7 +67,7 @@ export default function Product() {
                 <form>
                   <div className="form-group">
                     <div className="input-group">
-                      <input type="email" className="form-control rounded-start" id="email" name="email" placeholder="Write your email" />
+                      <input type="email" className="form-control rounded-start" id="email" name="email" placeholder="Write your email"/>
                       <span className="input-group-text"><BsSearch /></span>
                     </div>
                   </div>

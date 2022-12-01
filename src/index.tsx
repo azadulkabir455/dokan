@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router } from "react-router-dom"
 import { GlobalContextContainer } from './contextAPI/GlobalContext';
 import { Provider } from 'react-redux';
+import ErrorBoundary from './component/errorBoundary/ErrorBoundary';
 import store from './store';
 import App from './App';
 
@@ -18,11 +19,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router>
-        <GlobalContextContainer>
-          <App />
-        </GlobalContextContainer>
-      </Router>
+      <ErrorBoundary>
+        <Router>
+          <GlobalContextContainer>
+            <App />
+          </GlobalContextContainer>
+        </Router>
+      </ErrorBoundary>
     </Provider>
   </React.StrictMode>
 );

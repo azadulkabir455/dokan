@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from "react-router-dom"
+import { addToCart } from '../../store/reducers/cartReducers';
 import { getSingleProduct } from '../../store/reducers/productReducers';
 import { useDispatch, useSelector } from 'react-redux';
 import currencyFormatter from 'currency-formatter';
@@ -8,8 +9,8 @@ import { BsPlus,BsDash } from "react-icons/bs";
 export default function SingleProduct() {
     const [quantity, setQuantity] = useState<number>(1);
     const { id } = useParams();
-    const dispatch = useDispatch();
     const { product } = useSelector((state: any) => state.products)
+    const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getSingleProduct(id))
@@ -20,6 +21,12 @@ export default function SingleProduct() {
         if(quantity > 1) {
             setQuantity(quantity - 1)
         }
+    }
+
+    //Function for add product for cart
+
+    const addProductToCart = () => {
+        dispatch(addToCart({product, quantity}))
     }
     return (
         <>
@@ -47,7 +54,7 @@ export default function SingleProduct() {
                                 </div>
                             </div>
                             <div className="cartButton">
-                                <button className="btn btn-md btn-primary rounded-0 ms-2">Add to cart</button>
+                                <button className="btn btn-md btn-primary rounded-0 ms-2" onClick={addProductToCart}>Add to cart</button>
                             </div>
                         </div>
                         <div className="productDetails">

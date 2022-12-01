@@ -14,6 +14,7 @@ export default function GlobalHeader() {
     // Get Data From Redux Store
     const dispatch = useDispatch();
     const {users} = useSelector((state: any) => state.users);
+    const {totalQuantity} = useSelector((state:any) => state.cart)
 
     useEffect(() => {
         dispatch(getUsers())
@@ -37,7 +38,7 @@ export default function GlobalHeader() {
                             </NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink className="nav-link" to="/product">
+                            <NavLink className="nav-link" to="/products">
                                 <BsFillCartFill />
                                 <span className='d-lg-none menuText'>Product</span>
                             </NavLink>
@@ -48,7 +49,7 @@ export default function GlobalHeader() {
                             <li className="nav-item">
                                 <NavLink className="nav-link" to="/addtocart">
                                     <BsFillBagFill />
-                                    <span className='totalProduct'>0</span>
+                                    <span className='totalProduct'>{totalQuantity}</span>
                                 </NavLink>
                             </li>
                             {
