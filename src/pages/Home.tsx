@@ -4,6 +4,7 @@ import { BsThreeDotsVertical, BsLayersHalf, BsCardList, BsFillHandThumbsUpFill }
 import LikeCount from '../component/likeComponent/LikeCount';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPosts } from '../store/action/postAction';
+import { Link } from 'react-router-dom';
 import { deletePost, editPost, searchPosts, filterPosts } from '../store/reducers/postReducers';
 import "../assets/css/home.scss"
 
@@ -143,7 +144,7 @@ export default function Home() {
                     <small className="text-danger ">Date: {getDate(new Date(post.postDate.seconds * 1000))}</small>
                   </div>
                 </div>
-                <img src={post.imgUrl} alt="" className='rounded mb-4' />
+                <Link to={`/blogs/${post.id}`}><img src={post.imgUrl} alt="" className='rounded mb-4' /></Link>
                 <div className="titleContet d-flex align-items-start">
                   <h3 className='text-capitalize'>{post.postName} </h3>
                   <small className='badge bg-secondary text-capitalize ms-2 px-2 pb-2 pt-1 rounded-pill'>{post.postCategories}</small>

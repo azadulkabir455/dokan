@@ -1,5 +1,6 @@
 import React,{Suspense, lazy} from 'react'
 import { Routes, Route } from "react-router-dom"
+import SingleBlog from '../pages/singlePages/SingleBlog'
 
 const Login = lazy(() => import('../authentication/Login'))
 const SignUp = lazy(() =>  import('../authentication/SignUp'))
@@ -30,6 +31,7 @@ export default function Routers() {
       </Route>
       {/* SinglePages */}
       <Route path="/products/:id"  element={<SingleProduct />}/>
+      <Route path="/blogs/:id"  element={<SingleBlog />}/>
       {/* AuthenticateRoute */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
