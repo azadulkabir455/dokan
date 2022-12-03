@@ -23,7 +23,7 @@ export default function Home() {
 
   const dispatch = useDispatch()
   const { posts, loading } = useSelector((state: any) => state.posts);
-
+  console.log(posts)
   useEffect(() => {
     dispatch(getPosts());
   },[getPosts])

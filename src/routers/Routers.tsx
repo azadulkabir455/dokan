@@ -1,6 +1,5 @@
 import React,{Suspense, lazy} from 'react'
 import { Routes, Route } from "react-router-dom"
-import SingleBlog from '../pages/singlePages/SingleBlog'
 
 const Login = lazy(() => import('../authentication/Login'))
 const SignUp = lazy(() =>  import('../authentication/SignUp'))
@@ -15,6 +14,7 @@ const UserProfiles = lazy(() => import('../pages/userprofile/UserProfiles'));
 const UserBlog = lazy(() => import('../pages/userprofile/UserBlog'));
 const UserProduct = lazy(() => import('../pages/userprofile/UserProduct'));
 const SingleProduct =lazy(() => import("../pages/singlePages/SingleProduct"));
+const SingleBlog  = lazy( () => import('../pages/singlePages/SingleBlog'))
 
 export default function Routers() {
   return (

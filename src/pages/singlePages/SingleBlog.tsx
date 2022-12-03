@@ -1,34 +1,39 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { BsVectorPen } from "react-icons/bs";
+import CommentCount from '../../component/commentComponent/CommentCount';
+import { getPosts } from '../../store/action/postAction';
+
 
 export default function SingleBlog() {
     const { id } = useParams();
-    const { posts } = useSelector((state: any) => state.posts)
-    const singlePost = posts.find((post: any) => post.id === id);
-    console.log(singlePost)
+    const { posts, loading } = useSelector((state: any) => state.posts)
+    const singlePost = posts && posts.find((post: any) => post.id === id);
+    const getComments = singlePost && singlePost.comments;
+
+    console.log(id, posts, singlePost)
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getPosts());
+      },[getPosts])
+
     return (
         <>
             <div className="container mt-5">
                 <div className="row">
-                    <div className="col-8  mx-auto">
-                        <img src={singlePost.imgUrl} alt="blog img" className='rounded' style={{ width: "100%", height: "450px", objectFit: "cover" }} />
-                        <h3 className='mt-4'>{singlePost.postName}</h3>
-                        <p className='mt-2'>{singlePost.post}</p>
-                        <p className='mt-2'>{singlePost.post}</p>
-                        <div className="commentContainer">
-                            <form>
-                                <div className="form-group mb-3">
-                                    <label htmlFor="email" className="form-label text-primary"><b>Comment Here</b></label>
-                                    <div className="input-group">
-                                        <span className="input-group-text"><BsVectorPen /></span>
-                                        <input type="email" className="form-control" id="email" value={""} name="email" placeholder="Write your comment here" />
-                                    </div>
-                                </div>
-                            </form>
+                    {
+                        loading?
+                        <><h1>Loading post...</h1></>:
+                        singlePost && 
+                        <div className="col-8  mx-auto">
+                            <img src={singlePost.imgUrl} alt="blog img" className='rounded' style={{ width: "100%", height: "450px", objectFit: "cover" }} />
+                            <h3 className='mt-4'>{singlePost.postName}</h3>
+                            <p className='mt-2'>{singlePost.post}</p>
+                            <div className="comment mt-5">
+                                <CommentCount id={id} getComments={getComments}/>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
         </>
