@@ -1,0 +1,57 @@
+@import "./global.scss";
+
+.messages {
+    height: 310px;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+        background-color: #ddd;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background:  #aaa;
+    }
+}
+
+.message {
+    .chatMsg {
+        &.owner {
+            flex-direction: row-reverse;
+            margin-left: auto;
+            text-align: right;
+
+            .chatContent {
+
+                p,
+                img {
+                    border-radius: .4rem 0 .4rem .4rem !important;
+                }
+
+            }
+        }
+
+        max-width: 80%;
+
+        .chatHead {
+            small {
+                font-size: 10px !important;
+            }
+
+            img {
+                width: 45px;
+                height: 45px;
+                object-fit: cover;
+                border-radius: 100px;
+            }
+        }
+
+        .chatContent {
+            img {
+                width: 100%;
+                height: auto;
+            }
+        }
+    }
+}

@@ -7,6 +7,8 @@ import { getPosts } from '../store/action/postAction';
 import { Link } from 'react-router-dom';
 import { deletePost, editPost, searchPosts, filterPosts } from '../store/reducers/postReducers';
 import "../assets/css/home.scss"
+import Chats from '../component/ChatComponents/chats/Chats';
+import ChatContact from '../component/ChatComponents/chatContact/ChatContact';
 
 export default function Home() {
   // Current User form Context Api
@@ -157,7 +159,7 @@ export default function Home() {
                       <LikeCount id={post.id} likes={post.likes}/>
                     </div>
                     <div className="comment ps-1">
-                      <button className='btn btn-sm btn-primary rounded-pill'>comment</button>
+                      <button className='btn btn-sm btn-primary rounded-pill'>comment {post.comments.length}</button>
                     </div>
                   </div>
                   <div className="blogAction">
@@ -183,21 +185,14 @@ export default function Home() {
                     }
                   </div>
                 </div>
-                {/* <div className="commentForm mt-4" id="commentForm">
-                  <form>
-                    <div className="form-group mb-2">
-                      <input type="text" className="form-control" name="name" placeholder="Add Your Comment" />
-                    </div>
-                    <button type="submit" className='btn btn-sm btn-primary'>Add comment..</button>
-                  </form>
-                </div> */}
               </div>
             )
             }
           </div>
           <div className="col-12 col-lg-3">
-            <div className="chatContainer p-3 rounded shadow">
-              <h6>Chat app</h6>
+            <div className="chatContainer rounded shadow position-fixed bottom-0" style={{width: "310px"}}>
+              <ChatContact />
+              <Chats />
             </div>
           </div>
         </div>

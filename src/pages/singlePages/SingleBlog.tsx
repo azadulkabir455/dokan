@@ -10,12 +10,11 @@ export default function SingleBlog() {
     const { posts, loading } = useSelector((state: any) => state.posts)
     const singlePost = posts && posts.find((post: any) => post.id === id);
     const getComments = singlePost && singlePost.comments;
-
     console.log(id, posts, singlePost)
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getPosts());
-      },[getPosts])
+       dispatch(getPosts());
+      },[ ])
 
     return (
         <>
