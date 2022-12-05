@@ -15,12 +15,13 @@ const UserBlog = lazy(() => import('../pages/userprofile/UserBlog'));
 const UserProduct = lazy(() => import('../pages/userprofile/UserProduct'));
 const SingleProduct =lazy(() => import("../pages/singlePages/SingleProduct"));
 const SingleBlog  = lazy( () => import('../pages/singlePages/SingleBlog'))
+import ProtectedRoute from './ProtectedRoute'
 
 export default function Routers() {
   return (
     <Suspense fallback={<div>Loading ...</div>}>
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
       <Route path="/products" element={<Product />} />
       <Route path="/addtocart" element={<Cart />} />
       <Route path="/addblog" element={<AddBlog />} />

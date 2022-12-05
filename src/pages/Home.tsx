@@ -25,7 +25,7 @@ export default function Home() {
 
   const dispatch = useDispatch()
   const { posts, loading } = useSelector((state: any) => state.posts);
-  console.log(posts)
+
   useEffect(() => {
     dispatch(getPosts());
   },[getPosts])
@@ -190,7 +190,7 @@ export default function Home() {
             }
           </div>
           <div className="col-12 col-lg-3">
-            <div className="chatContainer rounded shadow position-fixed bottom-0" style={{width: "310px"}}>
+            <div className="chatContainer rounded shadow position-fixed" style={{width: "350px",bottom:"10px"}}>
               <ChatContact />
               <Chats />
             </div>

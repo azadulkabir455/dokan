@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react'
+import React, { createContext, useState, useEffect, useReducer } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { auth, database } from '../firebase-config';
 import {
@@ -20,12 +20,15 @@ const GlobalContextContainer = ({ children }: any) => {
   const navigate = useNavigate();
 
   // Authentication Functionality
-  const [currentUser, setCurrentUser] = useState<any[]>([]);
+  const [currentUser, setCurrentUser] = useState<any>([]);
   // Sign up Function
   const signUp = async (email: string, password: any, data: any[]) => {
-    await createUserWithEmailAndPassword(auth, email, password).then(async (authenticateUser) => {
+    await createUserWithEmailAndPassword(auth, email, password).then(async (authenticateUser: any) => {
       const userRef = doc(database, "userProfiles", authenticateUser.user.uid);
-      await setDoc(userRef, { ...data }).then(() => {
+      // For Chat app
+      await setDoc(doc(database, "userChats", authenticateUser.user.uid), {});
+      // For User Data
+      await setDoc(userRef, { ...data, id: authenticateUser.user.uid }).then(() => {
         console.log("User Registration Successfully");
         navigate("/login")
       })
@@ -69,15 +72,35 @@ const GlobalContextContainer = ({ children }: any) => {
   // CurrentUser Details
 
   useEffect(() => {
-    const UserAuth = onAuthStateChanged(auth,(currentUser:any) => {
+    const UserAuth = onAuthStateChanged(auth, (currentUser: any) => {
       setCurrentUser(currentUser);
     })
     return () => {
       UserAuth();
     }
   })
+
+  // For Chat Aplication
+  const initialState = {
+    chatId: "null",
+    user: {},
+  };
+
+  const chatReducer = (state:any, action:any) => {
+    switch (action.type) {
+      case "CHANGE_USER":
+        return {
+          user: action.payload,
+          chatId: currentUser.uid > action.payload.uid ? currentUser.uid + action.payload.uid : action.payload.uid + currentUser.uid,
+        };
+
+      default:
+        return state;
+    }
+  };
+  const [state, dispatch] = useReducer(chatReducer, initialState);
   return (
-    <GlobalContextProvider.Provider value={{ signUp, login, logout, resetpass, currentUser }}>
+    <GlobalContextProvider.Provider value={{ signUp, login, logout, resetpass, currentUser, data: state, dispatch }}>
       {children}
     </GlobalContextProvider.Provider>
   )
