@@ -1,19 +1,19 @@
-import React, { useContext } from 'react'
-import { GlobalContextProvider } from '../contextAPI/GlobalContext'
-import { useNavigate } from 'react-router-dom'
+import React, { FC, useContext } from 'react'
+import { Navigate, RouteProps,Route, RouterProps } from 'react-router-dom'
 
-const ProtectedRoute = ({ children }:any) => {
-    const { currentUser }: any = useContext(GlobalContextProvider)
-    const navigate = useNavigate()
-    if (!currentUser) {
-        return (
-            navigate("/login")
-        )
+
+export type ProtectedRouteProps = {
+    isAuthenticated: boolean;
+    authenticationPath: string;
+    outlet: JSX.Element;
+  };
+  
+  const  ProtectedRoute = ({isAuthenticated, authenticationPath, outlet}: ProtectedRouteProps) => {
+    if(isAuthenticated) {
+      return outlet;
     } else {
-        return (
-            { children }
-        )
+      return <Navigate to={{ pathname: authenticationPath }} />;
     }
-}
-
+  };
+  
 export default ProtectedRoute;

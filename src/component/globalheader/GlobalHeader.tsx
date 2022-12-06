@@ -13,8 +13,8 @@ export default function GlobalHeader() {
 
     // Get Data From Redux Store
     const dispatch = useDispatch();
-    const {users} = useSelector((state: any) => state.users);
-    const {totalQuantity} = useSelector((state:any) => state.cart)
+    const { users } = useSelector((state: any) => state.users);
+    const { totalQuantity } = useSelector((state: any) => state.cart)
 
     useEffect(() => {
         dispatch(getUsers())
@@ -46,33 +46,35 @@ export default function GlobalHeader() {
                     </ul>
                     <form className="d-flex">
                         <ul className="navbar-nav me-auto cart">
-                            <li className="nav-item">
-                                <NavLink className="nav-link" to="/addtocart">
-                                    <BsFillBagFill />
-                                    <span className='totalProduct'>{totalQuantity}</span>
-                                </NavLink>
-                            </li>
                             {
                                 currentUser ?
-                                    <li className="nav-item dropdown">
-                                        <NavLink className="nav-link dropdown-toggle" data-bs-toggle="dropdown" to="">
-                                            {
-                                                users.filter((findUser: any) => findUser.id === currentUser.uid).map((user: any, index: any) =>
-                                                    <span key={index}>
-                                                        <img src={user.userImgUrl} alt="" className='profileImg' />
-                                                    </span>
-                                                )
-                                            }
-                                        </NavLink>
-                                        <div className="dropdown-menu">
-                                            <NavLink className="dropdown-item" to="/userprofile/userBlog">My profile</NavLink>
-                                            <NavLink className="dropdown-item" to="/addblog">Add blog</NavLink>
-                                            <NavLink className="dropdown-item" to="/addproduct">Add product</NavLink>
-                                            <div className="dropdown-divider"></div>
-                                            <NavLink className="dropdown-item" to="/mood">Dark Mood</NavLink>
-                                            <NavLink className="dropdown-item" to="" onClick={logout}>Logout</NavLink>
-                                        </div>
-                                    </li>
+                                    <>
+                                        <li className="nav-item">
+                                            <NavLink className="nav-link" to="/addtocart">
+                                                <BsFillBagFill />
+                                                <span className='totalProduct'>{totalQuantity}</span>
+                                            </NavLink>
+                                        </li>
+                                        <li className="nav-item dropdown">
+                                            <NavLink className="nav-link dropdown-toggle" data-bs-toggle="dropdown" to="">
+                                                {
+                                                    users.filter((findUser: any) => findUser.id === currentUser.uid).map((user: any, index: any) =>
+                                                        <span key={index}>
+                                                            <img src={user.userImgUrl} alt="" className='profileImg' />
+                                                        </span>
+                                                    )
+                                                }
+                                            </NavLink>
+                                            <div className="dropdown-menu">
+                                                <NavLink className="dropdown-item" to="/userprofile/userBlog">My profile</NavLink>
+                                                <NavLink className="dropdown-item" to="/addblog">Add blog</NavLink>
+                                                <NavLink className="dropdown-item" to="/addproduct">Add product</NavLink>
+                                                <div className="dropdown-divider"></div>
+                                                <NavLink className="dropdown-item" to="/mood">Dark Mood</NavLink>
+                                                <NavLink className="dropdown-item" to="" onClick={logout}>Logout</NavLink>
+                                            </div>
+                                        </li> 
+                                    </>
                                     :
                                     <NavLink className="nav-link btn btn-danger btn-sm" to="/login" >Login</NavLink>
                             }

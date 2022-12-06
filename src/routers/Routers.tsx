@@ -1,5 +1,8 @@
-import React,{Suspense, lazy} from 'react'
+import React,{Suspense, lazy, useContext} from 'react'
+import { GlobalContextProvider } from '../contextAPI/GlobalContext'
 import { Routes, Route } from "react-router-dom"
+
+import ProtectedRoute,{ProtectedRouteProps} from './ProtectedRoute'
 
 const Login = lazy(() => import('../authentication/Login'))
 const SignUp = lazy(() =>  import('../authentication/SignUp'))
@@ -15,14 +18,19 @@ const UserBlog = lazy(() => import('../pages/userprofile/UserBlog'));
 const UserProduct = lazy(() => import('../pages/userprofile/UserProduct'));
 const SingleProduct =lazy(() => import("../pages/singlePages/SingleProduct"));
 const SingleBlog  = lazy( () => import('../pages/singlePages/SingleBlog'))
-import ProtectedRoute from './ProtectedRoute'
+
 
 export default function Routers() {
+  const {currentUser}:any = useContext(GlobalContextProvider)
+  const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> = {
+    isAuthenticated: currentUser,
+    authenticationPath: '/login',
+  };
   return (
     <Suspense fallback={<div>Loading ...</div>}>
     <Routes>
-      <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-      <Route path="/products" element={<Product />} />
+      <Route path="/" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Home />} />} />
+      <Route path="/" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Product />} />} />
       <Route path="/addtocart" element={<Cart />} />
       <Route path="/addblog" element={<AddBlog />} />
       <Route path="/addproduct" element={<AddProduct />} />
