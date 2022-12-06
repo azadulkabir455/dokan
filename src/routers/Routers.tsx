@@ -30,7 +30,7 @@ export default function Routers() {
     <Suspense fallback={<div>Loading ...</div>}>
     <Routes>
       <Route path="/" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Home />} />} />
-      <Route path="/" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Product />} />} />
+      <Route path="/products" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Product />} />} />
       <Route path="/addtocart" element={<Cart />} />
       <Route path="/addblog" element={<AddBlog />} />
       <Route path="/addproduct" element={<AddProduct />} />
