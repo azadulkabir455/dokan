@@ -34,7 +34,7 @@ export default function Message({ messages }: any) {
                         <small>{getDate(new Date(messages.date * 1000))}</small>
                     </div>
                     <div className='chatContent px-2 mt-2'>
-                        <p className='p-2 bg-primary rounded-start rounded-bottom text-white m-0 d-inline-block'>{messages.text}</p>
+                        <p className={`p-2 bg-primary rounded-start rounded-bottom text-white m-0 d-inline-block ${messages.text?"d-block":"d-none"}`}>{messages.text}</p>
                         {
                             messages.img && <img src={messages.img} alt="" className='rounded-start rounded-bottom mt-2' />
                         }
