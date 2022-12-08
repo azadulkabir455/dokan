@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { database } from "../../firebase-config";
-import { collection, addDoc, doc, deleteDoc,updateDoc } from "firebase/firestore"
+import { collection, addDoc, doc, deleteDoc, updateDoc } from "firebase/firestore"
 import { getPosts } from "../action/postAction";
 
 const postReducers = createSlice({
@@ -44,9 +44,14 @@ const postReducers = createSlice({
             state.posts = state.postsContaner.filter((post: any) => post.postName.toLowerCase().includes(action.payload));
         },
         filterPosts: (state, action) => {
-            // state.posts = state.postsContaner.filter((post:any)=> post.postCategories === action.payload)
-            console.log(action.payload)
-        }
+            const checkList = action.payload.filter((item: any) => item.checked).map((item: any) => item.label.toLowerCase())
+            console.log(checkList)
+            if (checkList.length) {
+                state.posts = state.postsContaner.filter((item: any) => checkList.includes(item.postCategories))
+            } else {
+                state.posts = state.postsContaner;
+            }
+        },
     },
     extraReducers: {
         [getPosts.pending]: (state, action) => {

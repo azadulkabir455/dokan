@@ -21,14 +21,20 @@ export default function Home() {
   const editPostCombineData = { postName, postCategories, post, id }
 
   // For filtering
-  const [checkValue, setCheckValue] = useState<any[]>([]);
+  const [check, setCheck] = useState<any[]>([
+    { id: 1, checked: false, label: "travel" },
+    { id: 2, checked: false, label: "science" },
+    { id: 3, checked: false, label: "education" },
+    { id: 4, checked: false, label: "technology" },
+  ]);
+
 
   const dispatch = useDispatch()
   const { posts, loading } = useSelector((state: any) => state.posts);
 
   useEffect(() => {
     dispatch(getPosts());
-  },[getPosts])
+  }, [getPosts])
 
   // Function for delete Post
   const deleteSinglePost: any = (id: any) => {
@@ -66,18 +72,22 @@ export default function Home() {
   }
 
   // Function for Filtering post
-  const checkHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const checked = e.target.checked;
-    if(checked) {
-      setCheckValue([...checkValue, value]);
-      dispatch(filterPosts({ checkValue }))
-    }else {
-      setCheckValue(checkValue.filter((e) => (e !== value)))
-      dispatch(filterPosts({ checkValue }))
-    }
-    
+
+  // Filter for categoris
+  const checkHandler = (id: number) => {
+    let checkUpdate = check.map((item: any) => item.id === id ? { ...item, checked: !item.checked } : item)
+    setCheck(checkUpdate)
   }
+
+  // Filter For author
+
+  const applyFiltering = () => {
+    dispatch(filterPosts(check))
+  }
+
+  useEffect(() => {
+    applyFiltering();
+  }, [check])
   return (
     <>
       <div className="container homeCointainer ">
@@ -98,99 +108,78 @@ export default function Home() {
               <div className="filterByCategories p-4 shadow rounded mt-4">
                 <h6 className='text-uppercase mb-2'>Filter by <span className='text-primary'>Categories</span></h6>
                 <form>
-                  <div className="form-check mb-2">
-                    <input className="form-check-input" type="checkbox" id="travel" name="categories" value="travel" onChange={checkHandler} />
-                    <label className="form-check-label" htmlFor="travel"> Travel</label>
-                  </div>
-                  <div className="form-check mb-2">
-                    <input className="form-check-input" type="checkbox" id="science" name="categories" value="science" onChange={checkHandler} />
-                    <label className="form-check-label" htmlFor="science"> Science</label>
-                  </div>
-                  <div className="form-check">
-                    <input className="form-check-input" type="checkbox" id="education" name="categories" value="education" onChange={checkHandler} />
-                    <label className="form-check-label" htmlFor="education"> Education</label>
-                  </div>
-                  <div className="form-check">
-                    <input className="form-check-input" type="checkbox" id="technology" name="categories" value="technology" onChange={checkHandler} />
-                    <label className="form-check-label" htmlFor="technology"> Technology</label>
-                  </div>
-                </form>
-              </div>
-              <div className="filterByAuthor p-4 shadow rounded mt-4">
-                <h6 className='text-uppercase mb-2'>Filter by <span className='text-primary'>Author</span></h6>
-                <form>
-                  <div className="form-check mb-2">
-                    <input className="form-check-input" type="checkbox" id="education" />
-                    <label className="form-check-label" htmlFor="education"> Education</label>
-                  </div>
-                  <div className="form-check mb-2">
-                    <input className="form-check-input" type="checkbox" id="education" />
-                    <label className="form-check-label" htmlFor="education"> Education</label>
-                  </div>
+                  {
+                    check.map((item: any) =>
+                      <div className="form-check mb-2" key={item.id}>
+                        <input className="form-check-input" type="checkbox" id={item.label} name="categories" value="travel" onChange={() => checkHandler(item.id)} checked={item.checked} />
+                        <label className="form-check-label text-capitalize" htmlFor={item.label}>{item.label}</label>
+                      </div>
+                    )
+                  }
                 </form>
               </div>
             </div>
           </div>
           <div className="col-12 col-lg-6">
             {
-              loading? 
-              <> <h1>Loading Post ...</h1></>:
-              posts.map((post: any) =>
-              <div className="singleBlog p-4 mb-4 shadow rounded" key={post.id}>
-                <div className="user d-flex mb-3">
-                  <div className="userImg ">
-                    <img src={post.userDetails.userImgUrl} alt="" className='rounded-circle' />
-                  </div>
-                  <div className="userInfo ms-3">
-                    <h6 className='m-0'>{post.userDetails.name} <small className='text-primary ps-1'>({post.userDetails.role})</small></h6>
-                    <small className="text-danger ">Date: {getDate(new Date(post.postDate.seconds * 1000))}</small>
-                  </div>
-                </div>
-                <Link to={`/blogs/${post.id}`}><img src={post.imgUrl} alt="" className='rounded mb-4' /></Link>
-                <div className="titleContet d-flex align-items-start">
-                  <h3 className='text-capitalize'>{post.postName} </h3>
-                  <small className='badge bg-secondary text-capitalize ms-2 px-2 pb-2 pt-1 rounded-pill'>{post.postCategories}</small>
-                </div>
-                <p className='mb-4'>{getPostContentShort(post.post)} <strong className='link-primary text-bold'>Read more</strong></p>
-                <hr />
-                <div className="blogActivity d-flex justify-content-between">
-                  <div className="likeComment d-flex">
-                    <div className="like">
-                      <LikeCount id={post.id} likes={post.likes}/>
+              loading ?
+                <> <h1>Loading Post ...</h1></> :
+                posts.map((post: any) =>
+                  <div className="singleBlog p-4 mb-4 shadow rounded" key={post.id}>
+                    <div className="user d-flex mb-3">
+                      <div className="userImg ">
+                        <img src={post.userDetails.userImgUrl} alt="" className='rounded-circle' />
+                      </div>
+                      <div className="userInfo ms-3">
+                        <h6 className='m-0'>{post.userDetails.name} <small className='text-primary ps-1'>({post.userDetails.role})</small></h6>
+                        <small className="text-danger ">Date: {getDate(new Date(post.postDate.seconds * 1000))}</small>
+                      </div>
                     </div>
-                    <div className="comment ps-1">
-                      <button className='btn btn-sm btn-primary rounded-pill'>comment {post.comments.length}</button>
+                    <Link to={`/blogs/${post.id}`}><img src={post.imgUrl} alt="" className='rounded mb-4' /></Link>
+                    <div className="titleContet d-flex align-items-start">
+                      <h3 className='text-capitalize'>{post.postName} </h3>
+                      <small className='badge bg-secondary text-capitalize ms-2 px-2 pb-2 pt-1 rounded-pill'>{post.postCategories}</small>
+                    </div>
+                    <p className='mb-4'>{getPostContentShort(post.post)} <strong className='link-primary text-bold'>Read more</strong></p>
+                    <hr />
+                    <div className="blogActivity d-flex justify-content-between">
+                      <div className="likeComment d-flex">
+                        <div className="like">
+                          <LikeCount id={post.id} likes={post.likes} />
+                        </div>
+                        <div className="comment ps-1">
+                          <button className='btn btn-sm btn-primary rounded-pill'>comment {post.comments.length}</button>
+                        </div>
+                      </div>
+                      <div className="blogAction">
+                        {
+                          post.userDetails.id === currentUser.uid ?
+                            <div className="dropdown">
+                              <span data-bs-toggle="dropdown"><BsThreeDotsVertical /></span>
+                              <ul className="dropdown-menu">
+                                <li>
+                                  <span
+                                    className="dropdown-item"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editModal"
+                                    onClick={() => prefillPost(post.postName, post.postCategories, post.post, post.id)}
+                                  >
+                                    Edit
+                                  </span>
+                                </li>
+                                <li><span className="dropdown-item" onClick={() => deleteSinglePost(post.id)}>Delete</span></li>
+                              </ul>
+                            </div> :
+                            ""
+                        }
+                      </div>
                     </div>
                   </div>
-                  <div className="blogAction">
-                    {
-                      post.userDetails.id === currentUser.uid ?
-                        <div className="dropdown">
-                          <span data-bs-toggle="dropdown"><BsThreeDotsVertical /></span>
-                          <ul className="dropdown-menu">
-                            <li>
-                              <span
-                                className="dropdown-item"
-                                data-bs-toggle="modal"
-                                data-bs-target="#editModal"
-                                onClick={() => prefillPost(post.postName, post.postCategories, post.post, post.id)}
-                              >
-                                Edit
-                              </span>
-                            </li>
-                            <li><span className="dropdown-item" onClick={() => deleteSinglePost(post.id)}>Delete</span></li>
-                          </ul>
-                        </div> :
-                        ""
-                    }
-                  </div>
-                </div>
-              </div>
-            )
+                )
             }
           </div>
           <div className="col-12 col-lg-3">
-            <div className="chatContainer rounded shadow position-fixed" style={{width: "350px",bottom:"10px"}}>
+            <div className="chatContainer rounded shadow position-fixed" style={{ width: "350px", bottom: "10px" }}>
               <ChatContact />
               <Chats />
             </div>
