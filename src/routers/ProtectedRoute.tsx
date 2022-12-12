@@ -1,5 +1,4 @@
-import React, { FC, useContext } from 'react'
-import { Navigate, RouteProps,Route, RouterProps } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 
 export type ProtectedRouteProps = {

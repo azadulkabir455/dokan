@@ -18,6 +18,7 @@ const UserBlog = lazy(() => import('../pages/userprofile/UserBlog'));
 const UserProduct = lazy(() => import('../pages/userprofile/UserProduct'));
 const SingleProduct =lazy(() => import("../pages/singlePages/SingleProduct"));
 const SingleBlog  = lazy( () => import('../pages/singlePages/SingleBlog'))
+const BlogCategories = lazy(() => import("../pages/singlePages/BlogCategories"))
 
 
 export default function Routers() {
@@ -41,6 +42,7 @@ export default function Routers() {
       {/* SinglePages */}
       <Route path="/products/:id"  element={<SingleProduct />}/>
       <Route path="/blogs/:id"  element={<SingleBlog />}/>
+      <Route path="categories/:type" element={<BlogCategories />}/>
       {/* AuthenticateRoute */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />

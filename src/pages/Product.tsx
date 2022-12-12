@@ -2,16 +2,23 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { BsSearch, BsThreeDotsVertical, BsLayersHalf, BsCardList, BsCurrencyDollar } from "react-icons/bs";
 import currencyFormatter from 'currency-formatter';
 import { useDispatch, useSelector } from 'react-redux';
-import { editProduct, deleteProduct } from '../store/reducers/productReducers';
+import { editProduct, deleteProduct, filterPro,searchPro } from '../store/reducers/productReducers';
 import { getProducts } from '../store/action/productAction';
 import { Link } from 'react-router-dom';
 import "../assets/css/product.scss"
+import ChatContact from '../component/ChatComponents/chatContact/ChatContact';
+import Chats from '../component/ChatComponents/chats/Chats';
 
 export default function Product() {
   const [inputs, setInputs] = useState<any>({});
   const [productType, setProductTyep] = useState<string>("default");
   const [productInfo, setProductInfo] = useState<string>("Write something about the product");
   const [id, setId] = useState<number | null>(null)
+  const [check, setCheck] = useState<any>([
+    { id: 1, checked: false, label: "cloth" },
+    { id: 2, checked: false, label: "groceries" },
+    { id: 3, checked: false, label: "electronics" },
+  ])
 
   const { price, discount } = inputs;
 
@@ -56,18 +63,35 @@ export default function Product() {
   const deleteProductData = (id: number) => {
     dispatch(deleteProduct(id))
   }
+
+  // function for search post 
+  const searchProduct = (e:ChangeEvent<HTMLInputElement>) => {
+    dispatch(searchPro(e.target.value))
+  }
+  // Fuction for Product filter with checkbox
+  const productSelect = (id: any) => {
+    const checkedProduct = check.map((item: any) => item.id == id ? { ...item, checked: !item.checked } : item);
+    setCheck(checkedProduct)
+  }
+  const applyFilter = () => {
+    dispatch(filterPro(check));
+  }
+
+  useEffect(() => {
+    applyFilter();
+  },[check])
   return (
     <>
       <div className="container blogContainer ">
         <div className="row  g-4 mt-4">
           <div className="col-12 col-lg-3">
-            <div className="searchProduct">
+            <div className="searchProduct position-sticky top-0">
               <div className="searchBlog p-4 shadow rounded">
                 <h6 className='text-uppercase mb-2'>Search your <span className='text-primary'>product</span></h6>
                 <form>
                   <div className="form-group">
                     <div className="input-group">
-                      <input type="email" className="form-control rounded-start" id="email" name="email" placeholder="Write your email"/>
+                      <input type="email" className="form-control rounded-start" id="search" name="email" placeholder="Search your product" onChange={(e) => searchProduct(e)} />
                       <span className="input-group-text"><BsSearch /></span>
                     </div>
                   </div>
@@ -76,35 +100,14 @@ export default function Product() {
               <div className="filterByCategories p-4 shadow rounded mt-4">
                 <h6 className='text-uppercase mb-2'>Filter by <span className='text-primary'>Categories</span></h6>
                 <form>
-                  <div className="form-check mb-2">
-                    <input className="form-check-input" type="checkbox" id="education" />
-                    <label className="form-check-label" htmlFor="education"> Education</label>
-                  </div>
-                  <div className="form-check mb-2">
-                    <input className="form-check-input" type="checkbox" id="education" />
-                    <label className="form-check-label" htmlFor="education"> Education</label>
-                  </div>
-                  <div className="form-check">
-                    <input className="form-check-input" type="checkbox" id="education" />
-                    <label className="form-check-label" htmlFor="education"> Education</label>
-                  </div>
-                </form>
-              </div>
-              <div className="filterByAuthor p-4 shadow rounded mt-4">
-                <h6 className='text-uppercase mb-2'>Filter by <span className='text-primary'>Author</span></h6>
-                <form>
-                  <div className="form-check mb-2">
-                    <input className="form-check-input" type="checkbox" id="education" />
-                    <label className="form-check-label" htmlFor="education"> Education</label>
-                  </div>
-                  <div className="form-check mb-2">
-                    <input className="form-check-input" type="checkbox" id="education" />
-                    <label className="form-check-label" htmlFor="education"> Education</label>
-                  </div>
-                  <div className="form-check">
-                    <input className="form-check-input" type="checkbox" id="education" />
-                    <label className="form-check-label" htmlFor="education"> Education</label>
-                  </div>
+                  {
+                    check.map((item: any) =>
+                      <div className="form-check mb-2">
+                        <input className="form-check-input" type="checkbox" id="{item.label}" checked={item.checked} onClick={() => productSelect(item.id)} />
+                        <label className="form-check-label text-capitalize" htmlFor="{item.label}"> {item.label}</label>
+                      </div>
+                    )
+                  }
                 </form>
               </div>
               <div className="filterByRange p-4 shadow rounded mt-4">
@@ -162,8 +165,9 @@ export default function Product() {
             </div>
           </div>
           <div className="col-12 col-lg-3">
-            <div className="chatContainer p-3 rounded shadow">
-              <h6>Chat app</h6>
+            <div className="chatContainer rounded shadow position-sticky top-0">
+              <ChatContact />
+              <Chats />
             </div>
           </div>
         </div>

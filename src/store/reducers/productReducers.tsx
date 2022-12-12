@@ -2,15 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import { database } from "../../firebase-config";
 import { collection, addDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { getProducts } from "../action/productAction";
-import { Action } from "@remix-run/router";
 
 
 const productReducers = createSlice({
     name: "products",
     initialState: {
-        products:[],
-        product:{},
-        error:{},
+        products: [],
+        productsContainer:[],
+        product: {},
+        error: {},
         loading: false
     },
     reducers: {
@@ -31,7 +31,7 @@ const productReducers = createSlice({
             })
         },
         deleteProduct: (state, action) => {
-            const productRef = doc(database,"products",action.payload);
+            const productRef = doc(database, "products", action.payload);
             deleteDoc(productRef).then(() => {
                 console.log("Delete Data successfully")
             }).catch((error) => {
@@ -39,7 +39,18 @@ const productReducers = createSlice({
             })
         },
         getSingleProduct: (state, action) => {
-            state.product = state.products.filter((product:any) => product.id === action.payload)[0]
+            state.product = state.products.filter((product: any) => product.id === action.payload)[0]
+        },
+        searchPro:(state, action) => {
+            state.products = state.productsContainer.filter((pro:any)=> pro.name.toLowerCase().includes(action.payload))
+        },
+        filterPro: (state, action) => {
+            const checkList = action.payload.filter((item: any) => item.checked).map((item: any) => item.label.toLowerCase());
+            if(checkList.length) {
+                state.products = state.productsContainer.filter((item:any) => checkList.includes(item.productType))
+            }else {
+                state.products = state.productsContainer;
+            }
         }
     },
     extraReducers: {
@@ -48,6 +59,7 @@ const productReducers = createSlice({
         },
         [getProducts.fulfilled]: (state, action) => {
             state.products = action.payload;
+            state.productsContainer = action.payload;
             state.loading = false;
         },
         [getProducts.error]: (state, action) => {
@@ -57,5 +69,5 @@ const productReducers = createSlice({
     }
 })
 
-export const {addProduct, editProduct, deleteProduct,getSingleProduct} = productReducers.actions;
+export const { addProduct, editProduct, deleteProduct, getSingleProduct, filterPro,searchPro } = productReducers.actions;
 export default productReducers.reducer;

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, ChangeEvent, useState } from 'react'
 import { GlobalContextProvider } from '../contextAPI/GlobalContext'
-import { BsThreeDotsVertical, BsLayersHalf, BsCardList, BsFillHandThumbsUpFill } from "react-icons/bs";
+import { BsThreeDotsVertical, BsLayersHalf, BsCardList } from "react-icons/bs";
 import LikeCount from '../component/likeComponent/LikeCount';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPosts } from '../store/action/postAction';
@@ -79,8 +79,6 @@ export default function Home() {
     setCheck(checkUpdate)
   }
 
-  // Filter For author
-
   const applyFiltering = () => {
     dispatch(filterPosts(check))
   }
@@ -93,7 +91,7 @@ export default function Home() {
       <div className="container homeCointainer ">
         <div className="row  g-4 mt-4">
           <div className="col-12 col-lg-3">
-            <div className="searchAction">
+            <div className="searchAction position-sticky top-0">
               <div className="searchBlog p-4 shadow rounded">
                 <h6 className='text-uppercase mb-2'>Search your <span className='text-primary'>post</span></h6>
                 <form>
@@ -138,7 +136,11 @@ export default function Home() {
                     <Link to={`/blogs/${post.id}`}><img src={post.imgUrl} alt="" className='rounded mb-4' /></Link>
                     <div className="titleContet d-flex align-items-start">
                       <h3 className='text-capitalize'>{post.postName} </h3>
-                      <small className='badge bg-secondary text-capitalize ms-2 px-2 pb-2 pt-1 rounded-pill'>{post.postCategories}</small>
+                      <small className='badge bg-secondary text-capitalize ms-2 px-2 pb-2 pt-1 rounded-pill'>
+                        <Link to={`/categories/${post.postCategories}`} className="text-white text-decoration-none">
+                          {post.postCategories}
+                        </Link>
+                      </small>
                     </div>
                     <p className='mb-4'>{getPostContentShort(post.post)} <strong className='link-primary text-bold'>Read more</strong></p>
                     <hr />
@@ -179,7 +181,7 @@ export default function Home() {
             }
           </div>
           <div className="col-12 col-lg-3">
-            <div className="chatContainer rounded shadow position-fixed" style={{ width: "350px", bottom: "10px" }}>
+            <div className="chatContainer rounded shadow position-sticky top-0">
               <ChatContact />
               <Chats />
             </div>
