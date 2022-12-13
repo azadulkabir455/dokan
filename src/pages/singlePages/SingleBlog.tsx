@@ -12,9 +12,13 @@ export default function SingleBlog() {
     const getComments = singlePost && singlePost.comments;
     console.log(id, posts, singlePost)
     const dispatch = useDispatch();
+    
     useEffect(() => {
-       dispatch(getPosts());
-      },[ ])
+       const getData = () => {
+        dispatch(getPosts());
+       }
+       getData();
+      },[])
 
     return (
         <>

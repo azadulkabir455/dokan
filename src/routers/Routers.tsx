@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom"
 
 import ProtectedRoute,{ProtectedRouteProps} from './ProtectedRoute'
 
+
 const Login = lazy(() => import('../authentication/Login'))
 const SignUp = lazy(() =>  import('../authentication/SignUp'))
 const ForgetPass = lazy(() => import('../authentication/ForgetPass'))
@@ -19,6 +20,7 @@ const UserProduct = lazy(() => import('../pages/userprofile/UserProduct'));
 const SingleProduct =lazy(() => import("../pages/singlePages/SingleProduct"));
 const SingleBlog  = lazy( () => import('../pages/singlePages/SingleBlog'))
 const BlogCategories = lazy(() => import("../pages/singlePages/BlogCategories"))
+const ProductAuthor = lazy(() => import('../pages/singlePages/ProductAuthor'))
 
 
 export default function Routers() {
@@ -43,6 +45,7 @@ export default function Routers() {
       <Route path="/products/:id"  element={<SingleProduct />}/>
       <Route path="/blogs/:id"  element={<SingleBlog />}/>
       <Route path="categories/:type" element={<BlogCategories />}/>
+      <Route path="author/:name" element={<ProductAuthor />}/>
       {/* AuthenticateRoute */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />

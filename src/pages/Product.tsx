@@ -133,7 +133,7 @@ export default function Product() {
                       <div className="singleProduct p-4 shadow rounded">
                         <img src={product.productImgUrl} alt="" className='rounded mb-4' />
                         <h5 className='m-0 text-capitalize'>{product.name}</h5>
-                        <small className='d-block pb-2'>Shop Owner: <span className='text-warning'> {product.userDetails.name}</span></small>
+                        <small className='d-block pb-2'>Shop Owner: <span className='text-warning'> <Link to={`/author/${product.userDetails.name}`} className='text-decoration-none'>{product.userDetails.name}</Link> </span></small>
                         <div className="productDetails d-flex justify-content-between">
                           <div className="actualPrice">
                             <span className='text-decoration-line-through '><b className='text-info '>Prcie:</b> {currencyFormatter.format(product.price, { code: 'USD' })}</span>

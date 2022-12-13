@@ -8,7 +8,7 @@ import { collection, getDocs} from "firebase/firestore";
 
 
 
-const getUsers: any = createAsyncThunk("users", async () => {
+const getUsers: any =  createAsyncThunk("users", async () => {
     const collectionRef = collection(database, "userProfiles");
     const usersData = await getDocs(collectionRef);
     const users = usersData.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
